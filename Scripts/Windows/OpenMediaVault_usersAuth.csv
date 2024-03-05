@@ -1,0 +1,6 @@
+mount_point,ip_mount,folder,password,username
+I,192.168.1.69,Frederic,lupf_Openmediavault23,frederic
+J,192.168.1.69,Alice,lupf_Alice24!,alice
+K,192.168.1.69,Bob,lupf_Alice24!,alice
+M,192.168.1.69,Jean,lupf_Alice24!,alice
+N,192.168.1.69,PoolM1,lupf_Alice24!,alice

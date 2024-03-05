@@ -1,0 +1,4 @@
+mount_point,ip_mount,folder,password,username
+E,192.168.1.59,Frederic, lupf_Qnap24!,frederic
+F,192.168.1.59,Alice,lupf_Alice24!,alice
+H,192.168.1.59,Bob,lupf_Bob24!,bob

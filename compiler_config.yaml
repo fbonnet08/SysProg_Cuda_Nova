@@ -1,0 +1,4 @@
+ compilers:
+   - description: C17
+     match-sources: ".*\\.c"
+     match-language: C

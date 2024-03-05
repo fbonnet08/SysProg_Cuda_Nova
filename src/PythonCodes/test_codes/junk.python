@@ -1,0 +1,109 @@
+print("File saved to: " + distr_file)
+
+
+#boxScatter_file = targetdir+os.path.sep+"dose_Plots_" + filename_without_ext + ".png"
+
+
+print("filename_without_ext_split[:]: ", filename_without_ext_split[:])
+
+
+rc = self.get_statistics_for_list(newnumber)
+        download_stat = "min: "+ str(self.sample_min)
+        print("download_stat: ", download_stat)
+
+
+        print(self.time[len(self.time[:])-1])
+
+# boxScatter_file = targetdir+os.path.sep+"dose_Plots_" + self.get_filename_postfix(filename_without_ext) + ".png"
+
+
+self.m.printMesgAddStr("boxScatter_file filename   --->: ", self.c.getMagenta(), boxScatter_file)
+
+        #print("File saved to: " + boxScatter_file)
+
+        self.m.printMesgAddStr("xaxis_[0:10]               --->: ", self.c.getMagenta(), boxScatter_file)
+        print("boxScatter_file filename --->: ", boxScatter_file)
+
+
+            print ("length of len(sp[:]): ", len(sp))
+            print ("length of len(sp[:]): ", lines[cnt_lines])
+            print("sp["+str(cnt_lines)+"]: ", sp)
+
+
+                '''
+                # getting the normalized number from the power
+                cnt = 0
+                for i in range(exp): cnt += 1
+                lk = cnt - 20
+                if flag == "yes":
+                    abs_lk = abs(lk)
+                    #7702787803638137
+                    msg = ""
+                    for i in range(0 , abs_lk-1): msg += "0"
+                    msg = "0." + msg
+                    number = msg + number
+                    newnumber = float(number)
+                else:
+                    newnumber = float ( number * math.pow(10,lk) )
+                '''
+
+
+            print("len(self.rows): ", len(self.rows))
+
+
+                        flag = "no"
+
+                      #str(number).strip()    +" "+ \
+                      #str(exp).strip()       +" "+ \
+                      #str(newnumber).strip() +"\n"
+
+
+                print("rows["+str(i)+"]: ", self.rows[i])
+
+
+        print("Printing the first five rows of the csv file...")
+        print("Number of columns in csv: ", self.csv_col)
+
+
+
+        #print("with_whiel_loop ----> ", with_while_loop)
+        self.m.printCMesg("with_whiel_loop ----> ", with_while_loop)
+
+
+    numerical_value = float(upload_speed.split("B/s")[0])
+    print("Numerical value:", numerical_value)
+    #elif "s" == parts:
+    print("c.getWith_while_loop()", c.getWith_while_loop())
+    #---------------------------------------------------------------------------
+    # Launch the Relion commands from here for the AutoPicking and the like
+    #---------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
+    # [RELION_END] end of the first iteration of the Relion
+    #---------------------------------------------------------------------------
+    try:
+        csv_file = open(log_file, 'a')
+    FileList = csv_file.read().splitlines()
+    for i in range(len(FileList)):
+        list_len = FileList[i].split(',')[:]
+        nMPI_lst.append(float(FileList[i].split(',')[1].split('=')[1]))
+        nThreads_lst.append(float(FileList[i].split(',')[2].split('=')[1]))
+        time_lst.append(float(FileList[i].split(',')[3].split('=')[1]))
+    except IOError:
+    rc = c.get_RC_FAIL()
+    m.printCMesg("Cannot open or no such file : "+csv_file, c.get_B_Red())
+    DataManage_common.getFinalExit(c,m,rc)
+    exit(rc)
+    
+    
+    #print("upload    Numerical value:", upload_value, "Unit:", upload_unit)
+    #print("Downsload Numerical value:", download_value, "Unit:", download_unit)
+    #print("upload    MBs            :", upload_MBs, "MB/s")
+    #print("Downsload MBs            :", download_MBs, "MB/s")
+    #print(df.to_string())
+    
+    
+    #print("upload    Numerical value:", upload_value, "Unit:", upload_unit)
+    #print("Downsload Numerical value:", download_value, "Unit:", download_unit)
+    #print("upload    MBs            :", upload_MBs, "MB/s")
+    #print("Downsload MBs            :", download_MBs, "MB/s")
+    #print(df.to_string())
