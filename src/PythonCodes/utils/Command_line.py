@@ -51,7 +51,7 @@ class Command_line:
         self.c = c
         self.m = m
         
-        self.m.printMesgStr("Instantiating the class : ", self.c.getGreen(), "Command_line")
+        self.m.printMesgStr("Instantiating the class       : ", self.c.getGreen(), "Command_line")
         #INitialising some of the basic file characters
         self.initialize()
     #---------------------------------------------------------------------------
@@ -85,17 +85,58 @@ class Command_line:
     #------------------------------------------
     #General command for args
     #------------------------------------------
-    #--->csvfile=CSV_FILE
+    # --scan_number=SCAN_NUMBER
+    def createScan_number(self):
+        __func__ = sys._getframe().f_code.co_name
+        #self.scan_number = scan_number
+        try:
+            SCAN_NUMBER = self.args['--scan_number']
+        except:
+            SCAN_NUMBER = self.c.getRet_time()
+        self.c.setScan_number(SCAN_NUMBER)
+
+    # --RT=RET_TIME
+    def createRet_time(self):
+        __func__ = sys._getframe().f_code.co_name
+        #--RT=RET_TIME
+        try:
+            RET_TIME = self.args['--RT']
+        except:
+            RET_TIME = self.c.getRet_time()
+        self.c.setRet_time(RET_TIME)
+
+    #--rawfile=RAW_FILE
+    def createRAW_file(self):
+        __func__ = sys._getframe().f_code.co_name
+        #--rawfile=RAW_FILE
+        try:
+            RAW_FILE = self.args['--rawfile']
+        except:
+            RAW_FILE = self.c.getRAW_file()
+        self.c.setRAW_file(RAW_FILE)
+
+    # --quantum_computing=QUANTUM_COMPUTING
+    def createQuantumComputing(self):
+        __func__ = sys._getframe().f_code.co_name
+        #--quantum_computing=QUANTUM_COMPUTING
+        if self.args['--quantum_computing'] == "yes":
+            QUANTUM_COMPUTING = "yes"
+        elif self.args['--quantum_computing'] == "no":
+            QUANTUM_COMPUTING = "no"
+        else:
+            QUANTUM_COMPUTING = self.c.getQuantumComputing()
+        self.c.setQuantumComputing(QUANTUM_COMPUTING)
+
+    # --csvfile=CSV_FILE
     def createCSV_file(self):
         __func__ = sys._getframe().f_code.co_name
-        #--plot_asc=PLOT_ASC
+        #--csvfile=CSV_FILE
         try:
             CSV_FILE = self.args['--csvfile']
         except:
             CSV_FILE = self.c.getCSV_file()
         self.c.setCSV_file(CSV_FILE)
-
-    #--->plot_asc=PLOT_ASC
+    #--plot_asc=PLOT_ASC
     def createPlot_asc(self):
         __func__ = sys._getframe().f_code.co_name
         #--plot_asc=PLOT_ASC
@@ -104,10 +145,11 @@ class Command_line:
         except:
             PLOT_ASC = "copy.asc"
         self.c.setPlot_asc(PLOT_ASC)
-    
+
+    #--with_while_loop=WITH_WHILE_LOOP
     def createWith_while_loop(self):
         __func__ = sys._getframe().f_code.co_name
-        #--use_gpu=USE_GPU
+        #--with_while_loop=WITH_WHILE_LOOP
         if self.args['--with_while_loop'] == "yes":
             with_while_loop = "yes"
         elif self.args['--with_while_loop'] == "no":
@@ -116,7 +158,8 @@ class Command_line:
             with_while_loop = self.c.with_while_loop
         self.m.printMesgStr("with_while_loop ----> ", self.c.getRed(), with_while_loop)
         self.c.setWith_while_loop(with_while_loop)
-    
+
+   #--use_gpu=USE_GPU
     def createArgs_use_gpu(self):
         __func__ = sys._getframe().f_code.co_name
         #--use_gpu=USE_GPU

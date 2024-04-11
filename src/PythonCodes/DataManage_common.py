@@ -211,8 +211,18 @@ class DataManage_common:
         self.current_AllTableCount_json_file = "current_AllTableCount_rec.json"
         self.with_while_loop  = "standard"
         self.plot_asc = "copy.asc"
-        self.csvfile  = "netUse.csv"
-        #TODO: If statement will be removed after checking
+        self.csvfile = "netUse.csv"
+        self.rawfile = "mzmineRaw.raw"
+        self.mgffile = "mzmineRaw.mgf"
+        self.quantum_computing = "no"
+        self.scan_number = 1
+        self.Ret_time = 1.23
+        self.pepmass = 123.456
+        self.charge = 0
+        self.MSLevel = 1
+        self.begin_ions = "BEGIN IONS"
+        self.end_ions = "END IONS"
+    #TODO: If statement will be removed after checking
         if (system == 'Linux'):
             sys.path.append(os.path.join(os.getcwd(), 'utils'))
             #sys.path.append('./utils')
@@ -788,9 +798,55 @@ class DataManage_common:
     #--->csvfile=CSV_FILE
     def setCSV_file(self, csvfile):
         self.csvfile = csvfile
+    #--->quantum_computing=QUANTUM_COMPUTING
+    def setQuantumComputing(self, quantum_computing):
+        self.quantum_computing = quantum_computing
+    #--->rawfile=RAW_FILE
+    def setRAW_file(self, rawfile):
+        self.rawfile = rawfile
+    def setMGF_file(self, mgffile):
+        self.mgffile = mgffile
+    # --scan_number=SCAN_NUMBER
+    def setScan_number(self, scan_number):
+        self.scan_number = scan_number
+    # --RT=RET_TIME
+    def setRet_time(self, ret_time):
+        self.Ret_time = ret_time
+    def setPepMass(self, pepmass):
+        self.pepmass = pepmass
+    def setCharge(self, charge):
+        self.charge = charge
+    def setMSLevel(self, mslevel):
+        self.MSLevel = mslevel
+    def setBegin_Ions(self, begin_ions):
+        self.begin_ions = begin_ions
+    def setEnd_Ions(self, end_ions):
+        self.end_ions = end_ions
     #---------------------------------------------------------------------------
     # [Getters]: methods
     #---------------------------------------------------------------------------
+    def getBegin_Ions(self):
+        return self.begin_ions
+    def getEnd_Ions(self):
+        return self.end_ions
+    def getPepMass(self):
+        return self.pepmass
+    def getCharge(self):
+        return self.charge
+    def getMSLevel(self):
+        return self.MSLevel
+    # --scan_number=SCAN_NUMBER
+    def getScan_number(self):
+        return self.scan_number
+    # --RT=RET_TIME
+    def getRet_time(self):
+        return self.Ret_time
+    def getMGF_file(self):
+        return self.mgffile
+    def getRAW_file(self):
+        return self.rawfile
+    def getQuantumComputing(self):
+        return self.quantum_computing
     def getCSV_file(self):
         return self.csvfile
     def getPlot_asc(self):

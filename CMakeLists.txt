@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
 set(FIND_CUDA_PATHS C:/Program Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v12.2)
 set(FIND_CUDA_BIN_PATHS C:/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v12.2/bin/)
 set(CUFFT_INCLUDE_DIR C:/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v12.2/include)

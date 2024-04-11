@@ -9,6 +9,7 @@ Usage:
   DataManage_GpuConfigure.py [--with_while_loop=WITH_WHILE_LOOP]
                              [--plot_asc=PLOT_ASC]
                              [--csvfile=CSV_FILE]
+                             [--quantum_computing=QUANTUM_COMPUTING]
 
 NOTE: select and option
 
@@ -19,6 +20,7 @@ Options:
   --with_while_loop=WITH_WHILE_LOOP  Use while loops
   --plot_asc=PLOT_ASC                Plot asc file
   --csvfile=CSV_FILE                 csv file to be analyzed
+  --quantum_computing=QUANTUM_COMPUTING
   --help -h                          Show this help message and exit.
   --version                          Show version.
 '''
@@ -36,6 +38,9 @@ import src.PythonCodes.utils.messageHandler
 import src.PythonCodes.utils.Command_line
 import src.PythonCodes.utils.MathematicalModel_Analyser
 from docopt import docopt
+
+import cirq
+
 #C:\Program Files\Python312\python.exe
 ext_asc = ".asc"
 ext_csv = ".csv"
@@ -62,7 +67,8 @@ if __name__ == "__main__":
     l = src.PythonCodes.utils.Command_line.Command_line(args, c, m)
     # building the command line
     l.createWith_while_loop()
-    
+    l.createQuantumComputing()
+
     m.printMesgStr("This is the main program : ", c.get_B_Magenta(), "NetworkDriverMain.py")
     # The network usage class on the interfaces with the while loop
     Usage_Network = src.PythonCodes.src.Usage_Network.Usage_Network(c, m)
@@ -76,8 +82,8 @@ if __name__ == "__main__":
         m.printMesgStr("The csv file that will be analyzed: ", c.getYellow(), c.getCSV_file())
         PLOT_ASC = c.getCSV_file().split(ext_csv)[0]+ext_asc
         c.setPlot_asc(PLOT_ASC)
-
-# Starting the probing
+    
+    # Starting the probing
     csvfile = c.getCSV_file()
     ncnt = "while the copy continues"
     if (c.getWith_while_loop() == "yes"):
@@ -99,15 +105,56 @@ if __name__ == "__main__":
             
             rc = Math_Analyser.make_histogram(Math_Analyser.csvfile, targetdir)
             #rc = Math_Analyser.get_statistics()
-        
-    #---------------------------------------------------------------------------
-    # [Final] ovrall return code
-    #---------------------------------------------------------------------------
+
+    # --quantum_computing=QUANTUM_COMPUTING
+    if c.getQuantumComputing() == "yes":
+        import src.PythonCodes.src.qpu.QuantumComp
+
+        # Import the qat packages here if needed.
+        m.printMesgAddStr("Using QC    --->: ", c.getYellow(),
+                          "[--quantum_computing]: "+c.getGreen()+c.getQuantumComputing())
+        '''
+        Begin the MyQLM work here.
+        '''
+        quantumc = src.PythonCodes.src.qpu.QuantumComp.QuantumComp(c, m)
+        qubit_count = 8
+        #rc = quantumc.BellState(qubit_count)
+
+        # pyAQASM program 1
+        #rc = quantumc.Circuits_pyAQASM(qubit_count)
+
+        qubit_count = 4
+        #rc = quantumc.Quantum_FullAdder(qubit_count)
+
+        # The or statement
+        qubit_count = 3
+        #rc = quantumc.quantum_or(qubit_count)
+
+
+
+        # Bernstein-Varizani
+        secret_code = '0000001'
+        qubit_count = len(secret_code)
+        rc = quantumc.Bernstein_Vazirani(secret_code, qubit_count)
+
+
+
+
+    else:
+        m.printMesgAddStr("Using QC    --->: ", c.getYellow(),
+                          "[--quantum_computing]: "+c.getRed()+c.getQuantumComputing())
+
+
+
+
+    # ---------------------------------------------------------------------------
+    # [Final] overall return code
+    # ---------------------------------------------------------------------------
     # Final exit statements
     src.PythonCodes.DataManage_common.getFinalExit(c, m, rc)
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
     # End of testing script
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
 
 
 

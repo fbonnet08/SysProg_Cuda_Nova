@@ -29,20 +29,20 @@ function My-Copy-File {
 ################################################################################
 # first unmount the drives in case they are already mounted
 Write-Host "First start by umoiunting the drives to be sure"
-.\Scripts\Windows\UmountShareDrives.ps1
+#.\Scripts\Windows\UmountShareDrives.ps1
 # mounting the drives
 Write-Host "Next we remount the drive and start the procedure"
-.\Scripts\Windows\MountShareDrives.ps1
+#.\Scripts\Windows\MountShareDrives.ps1
 ################################################################################
 # Getting the data from the copymounting the drives
 Write-Host "Launching NetworkDriverMain.py ..."
 ################################################################################
-$f_copy_from = "C:\Users\Frederic\Desktop\cuda_12.3.2_546.12_windows.exe"
+$f_copy_from = "D:\20200702_2001-999_EPU-SP_Fred"  #"C:\Users\Frederic\Desktop\cuda_12.3.2_546.12_windows.exe"
 ################################ QNAP-T431P ####################################
-$f_copy_to   = "E:\Frederic"
-$csv_file    = "cp_file_NetUse_QNAP-T431P.csv"
+$f_copy_to   = "A:\Frederic"
+$csv_file    = "cp_file_NetUse_MetaData_124610_12Mar24_QNAP-T431P.csv"
 
-start powershell {python .\NetworkDriverMain.py --with_while_loop=yes --csvfile=cp_file_NetUse_QNAP-T431P.csv}
+start powershell {python .\NetworkDriverMain.py --with_while_loop=yes --csvfile=cp_file_NetUse_MetaData_124610_12Mar24_QNAP-T431P.csv}
 
 Write-Host "Transfering data to storage QNAP-T431P ..."
 Start-Sleep -Seconds 10
@@ -54,4 +54,4 @@ Get-Process *python|Stop-Process
 
 # Next we graph the result using the graph command
 Write-Host "Graphing the data for the transfer ..."
-start powershell {python .\NetworkDriverMain.py --csvfile=cp_file_NetUse_QNAP-T431P.csv}
+start powershell {python .\NetworkDriverMain.py --csvfile=cp_file_NetUse_MetaData_124610_12Mar24_QNAP-T431P.csv}

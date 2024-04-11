@@ -81,7 +81,7 @@ class MathematicalModel_Analyser:
         self.running_mean = []
         # some path iniitialisation
         self.targetdir = "./"
-    # Getting the file structure in place
+        # Getting the file structure in place
         self.file_asc = self.c.getPlot_asc()
         self.csvfile = self.c.getCSV_file()
         
@@ -118,7 +118,7 @@ class MathematicalModel_Analyser:
         rc, distr_file = self.plot_Distr(self.upload, csvfile, targetdir, "upload")
         rc, distr_file = self.plot_Distr(self.download, csvfile, targetdir, "download")
         rc = self.plot_scatters_and_boxplots(self.upload, self.download, csvfile, targetdir)
-        
+
         return rc
     #---------------------------------------------------------------------------
     # [Plotters]
@@ -129,7 +129,7 @@ class MathematicalModel_Analyser:
         dataset_plot = pandas.DataFrame(dataset, columns = [setname])
         filename = os.path.basename(setname)
         filename_without_ext = os.path.splitext(filename)[0]
-        
+
         dist = seaborn.displot(data=dataset_plot, x=setname,
                                kde=True, kind="hist", bins = 100, aspect = 1.5)
         dist.set(xlabel=which_way+" (MB/s)", ylabel='Transfer (MB/s) [100]').set(title=filename_without_ext)
@@ -179,7 +179,7 @@ class MathematicalModel_Analyser:
         date_time = []
         for i in range(len(self.date[:])):
             date_time.append(datetime.datetime.strptime(self.date[i]+" "+self.time[i],'%Y-%m-%d %H:%M:%S'))
-        
+
         sc1 = axes[1].plot(date_time, newnumber, color='magenta', linestyle='-', marker='o', markersize=2)
         sc2 = axes[1].plot(date_time, dose, color='blue', linestyle='-', marker='o', markersize=2)
         axes[1].legend(['upload', 'download'], loc='upper right', fontsize=14)
@@ -227,11 +227,11 @@ class MathematicalModel_Analyser:
     def write_csvToAsc_file(self, csvfile):
         rc = self.c.get_RC_SUCCESS()
         __func__= sys._getframe().f_code.co_name
-        
+
         basename = os.path.splitext(csvfile)[0]
         ext = ""
         if len(os.path.splitext(csvfile)) > 1: ext = os.path.splitext(csvfile)[1]
-        
+
         #print("basename: ", basename)
         self.m.printMesgAddStr("basename                   --->: ", self.c.getMagenta(), basename)
         file_asc = basename+self.ext_asc
@@ -298,7 +298,7 @@ class MathematicalModel_Analyser:
     def read_csv_file(self, csvfile):
         rc = self.c.get_RC_SUCCESS()
         __func__= sys._getframe().f_code.co_name
-        
+
         try:
             file = open(csvfile)
             type(file)

@@ -1,3 +1,270 @@
+BEGIN IONS
+PEPMASS=371.101196289063
+CHARGE=1
+MSLEVEL=2
+Title: Scan#: 2880, RT: 13.343552 min
+53.370948791503906 3543.15185546875
+58.52656555175781 3443.591796875
+61.01050567626953 38799.90234375
+61.08038330078125 3710.74658203125
+62.98991394042969 8392.2451171875
+73.04691314697266 702726.3125
+73.68528747558594 3755.27490234375
+75.02616119384766 27161.1328125
+79.0208969116211 6511.146484375
+91.05750274658203 838079.125
+93.03697204589844 5819.48828125
+114.07355499267578 100271.6953125
+119.08766174316406 5105.83447265625
+123.30328369140625 4028.0693359375
+138.8660888671875 4587.61962890625
+149.04486083984375 22027.201171875
+166.08094787597656 4295.85888671875
+167.05567932128906 45617.46875
+169.03411865234375 8226.5732421875
+225.04324340820312 9990.484375
+266.999755859375 40469.87890625
+268.9786682128906 171044.890625
+270.9577331542969 5272.8466796875
+281.0516052246094 19119.337890625
+283.0309753417969 37427.2890625
+285.0101623535156 672931.0
+299.06201171875 106169.3984375
+303.0203552246094 29062.958984375
+355.0705871582031 665722.0625
+371.1006164550781 63353.44921875
+371.1656188964844 6792.837890625
+371.2807922363281 6239.44873046875
+373.08282470703125 31441.638671875
+393.37335205078125 4548.09619140625
+END IONS
+
+
+
+
+
+
+
+Scan Number	m/z	Intensity	Relative	Segment Number	Flags
+2884	73.0469436645508	807926.25	100	1
+2884	355.070739746094	799585.5625	98.9676424673663	1
+2884	285.010406494141	674658.75	83.5049919469754	1
+2884	91.0575485229492	672627.5625	83.2535844082303	1
+2884	268.979370117188	127512.90625	15.7827408442293	1
+2884	114.073608398438	76376.296875	9.45337484392913	1
+2884	266.9990234375	47313.796875	5.85620245350365	1
+2884	373.081390380859	40146.421875	4.96907011933329	1
+2884	355.281951904297	31424.400390625	3.88951347856627	1
+2884	61.0106430053711	15843.3505859375	1.9609897049313	1
+2884	75.0261764526367	12276.154296875	1.51946471560678	1
+2884	303.021423339844	11916.3173828125	1.47492637883872	1
+2884	73.040901184082	9135.796875	1.13077114093025	1	E
+2884	73.0512924194336	8499.7216796875	1.05204177728939	1	E
+2884	62.9897880554199	8356.763671875	1.03434733948488	1
+2884	339.039306640625	7692.876953125	0.952175641418385	1
+2884	96.0858993530273	7486.27783203125	0.926604109227946	1
+2884	81.0006408691406	7092.5283203125	0.877868285664997	1
+2884	246.480117797852	6998.67138671875	0.866251268196664	1
+2884	73.5681228637695	6863.21826171875	0.84948573730817	1
+2884	166.444671630859	6476.9228515625	0.801672535279365	1
+2884	170.348892211914	6419.62548828125	0.794580630135641	1
+2884	63.1329879760742	6312.1240234375	0.781274778909276	1
+2884	91.8839950561523	6275.2783203125	0.776714250875312	1
+2884	139.392669677734	6197.7861328125	0.767122758149336	1
+2884	267.795837402344	6076.77392578125	0.752144632728699	1
+2884	133.009857177734	6064.5810546875	0.750635476281096	1
+2884	112.587326049805	6035.998046875	0.747097652400204	1
+2884	56.1290855407715	5407.029296875	0.669247879602253	1
+2884	63.7651786804199	5338.28076171875	0.660738620847974	1
+2884	114.068099975586	5090.88623046875	0.630117690874477	1
+
+
+
+
+   self.m_on_Z.append(float(spectrum[i].split(' ')[0]))
+  self.intensity.append(float(spectrum[i].split(' ')[1]))
+
+
+
+# Now that we have separated and obtained the min and max of the spectrum
+self.sorted_intensity = self.intensity.sort()
+# let's compute the relative values and mapp to the correct index values
+for j in range(len(self.intensity[:])):
+self.intensity_indexing.append(self.intensity.index(self.intensity[j]))
+self.relative.append((float(self.intensity[j] / float(self.sample_max)))*100.0)
+
+print("self.intensity[:]", self.intensity[:])
+print("self.sorted_intensity[:]", self.sorted_intensity)
+print("self.intensity_indexing[:]", self.intensity_indexing[:])
+print("self.relative[:]", self.relative[:])
+
+
+            msg = str(self.mz_intensity_relative_sorted_lst[i][0]) + self.c.getBlue() + " <---> " + \
+                  self.c.getRed() + str(self.mz_intensity_relative_sorted_lst[i][1]) + self.c.getBlue() + " <---> " + \
+                  self.c.getGreen() + str(self.mz_intensity_relative_sorted_lst[i][2]) + self.c.get_C_Reset()
+
+print("sorted_spec[:][2]", sorted_spec[2][:])
+   for item in sorted_spec[:]:
+   print(item[2])
+
+
+
+            #print("list["+str(i)+"] ---> ", msg)
+            #self.intensity_indexing.append(spectrum.index(spectrum[i]))
+
+        #print("self.spectrum_out[:]", self.mz_intensity_relative_lst[:])
+        #print("\n")
+        #print("self.sorted_spectrum_out[:]", self.mz_intensity_relative_sorted_lst[:])
+
+
+            print("begin_ions = ", begin_ions)
+            print("pepmass = ", pepmass)
+            print("charge  = ", charge )
+            print("mslevel = ", mslevel)
+            print("end_ions = ", end_ions)
+
+
+
+
+print("max of the list ---> ", max(sepctrum[:].split(' ')[0]))
+print("max of the list ---> ", min(sepctrum[:]))
+
+print("sample min : ", self.sample_min)
+print("sample max : ", self.sample_max)
+print("sample mean : ",self.sample_mean)
+print("leng of the list : ", )
+
+self.sample_variance = numpy.var(self.intensity[:], axis=0)
+print("sample variance : ",self.sample_variance)
+print("The spectrum are not the same ! Continuing with the passed spectrum: ")
+
+if scan_number == scan:
+print("The scan are the same: All good")
+else:
+msg = self.c.getBlue()+ ""+self.c.getRed()+str(scan_number)+" != "+str(scan)
+print("The scan are not the same: that is not good", msg)
+
+print(os.getcwd())
+print("The spectrum are the same !, we will use the object spectrum for now")
+
+
+print("scan_number: ", scan_number)
+print("RT: ", retention_time)
+
+
+
+            for line in lines:
+                spec_line = line.split('\n')[0]
+                print("spec_line ---> ", spec_line)
+
+                if trigger_key in spec_line:
+                    print("line["+str(cnt)+"]- ", spec_line)
+                    print(lines[cnt - 4].split('\n')[0])
+                    print(lines[cnt - 3].split('\n')[0])
+                    print(lines[cnt - 2].split('\n')[0])
+                    print(lines[cnt - 1].split('\n')[0])
+                    out_data.append(lines[cnt - 4].split('\n')[0])
+                    out_data.append(lines[cnt - 3].split('\n')[0])
+                    out_data.append(lines[cnt - 2].split('\n')[0])
+                    out_data.append(lines[cnt - 1].split('\n')[0])
+
+
+
+
+            if spec_line == end_key: break
+                #if cnt == 50: break
+                cnt += 1
+
+
+
+
+            new_element = False
+            trigger_exists = False
+            out_data = ''
+            element_data = ''
+            for line in lines:
+                if not new_element and start_key == line[:len(start_key)].lower():
+                    new_element = True
+                    element_data += f'{line}\n'
+                else:
+                    element_data += f'{line}\n'
+                    if trigger_key == line[:len(trigger_key)].lower():
+                        trigger_exists = True
+                    if end_key == line[:len(end_key)].lower():
+                        if trigger_exists:
+                            out_data += element_data
+                        trigger_exists = False
+                        new_element = False
+                        element_data = ''
+
+
+
+https://stackoverflow.com/questions/67161599/extracting-specific-sections-of-text-from-simple-text-files
+
+def parse_input(in_data):
+    start_key = 'room'
+    end_key = 'exit'
+    trigger_key = 'service prov'
+    new_element = False
+    trigger_exists = False
+    out_data = ''
+    element_data = ''
+    for line in in_data:
+        if not new_element and start_key == line[:len(start_key)].lower():
+            new_element = True
+            element_data += f'{line}\n'
+        else:
+            element_data += f'{line}\n'
+            if trigger_key == line[:len(trigger_key)].lower():
+                trigger_exists = True
+            if end_key == line[:len(end_key)].lower():
+                if trigger_exists:
+                    out_data += element_data
+                trigger_exists = False
+                new_element = False
+                element_data = ''
+    return out_data
+
+
+  Executing
+
+  print(parse_input(lines))
+  Produces:
+
+  room 5
+  name "Ted"
+  service prov 10.1
+  outlet 49-50,52
+  exit
+  room 51
+  name "Sue"
+  service prov 10.2.0
+  outlet 49
+  exit
+
+
+
+
+
+            print("len(lines) ---> ", len(lines))
+
+
+
+
+        print("check ---> ", os.path.isfile(file_path))
+
+        #self.m.printMesgAddStr(, self.c.getRed(), "WARNING -->: are not the same")
+
+
+
+        print("input self.file_mgf ---> ", self.file_mgf)
+        print("input mgf_file ---> ", mgf_file)
+        print("input file_path ---> ", file_path)
+
+
+
+
+
 print("File saved to: " + distr_file)
 
 
