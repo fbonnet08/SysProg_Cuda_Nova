@@ -1,3 +1,65 @@
+
+
+        for i in range(len(self.molecules_lst[:])):
+            #self.m.printMesgAddStr("[molecules_lst]: mol("+str(i)+"), length("+str(len(self.molecules_lst[i]))+") --->: ",
+            #                       self.c.getYellow(), self.molecules_lst[i][1])
+            '''
+            for j in range(len(self.molecules_lst[i][:])):
+                self.m.printMesgAddStr("[molecules_lst]: mol("+str(i)+"), length("+str(len(self.molecules_lst[i][:]))+") --->: ",
+                                       self.c.getYellow(), self.molecules_lst[i][j])
+            '''
+            self.ith_molecules_dict.clear()
+            for ith_index, ith_element in enumerate(self.molecules_lst[i][:]):
+                self.ith_molecules_dict[ith_index] = ith_element
+            # [end-loop]
+            msg = "mol("+str(i)+")"
+            self.molecules_dict = {key: value for value, key in enumerate(self.molecules_lst[i][:])}
+            #self.molecules_dict[msg] = self.ith_molecules_dict
+        # [end-loop]
+
+        print("self.ith_molecules_dict ---> ", self.ith_molecules_dict)
+        print("self.molecules_dict     ---> ", self.molecules_dict)
+
+
+
+
+            for i in range(database_file_len):
+                if start_key in lines[i].split('\n')[0]:
+                    self.ith_molecules_lst.append(lines[i].split('\n')[0])
+                    if end_key in lines[i].split('\n')[0]:
+                        self.molecules_lst.append(self.ith_molecules_lst[:])
+                        self.ith_molecules_lst.clear()
+                        break
+
+
+
+
+
+
+        #print("spectrum[:]) ---> : ", spectrum[:])
+        #print("mz_I_Rel[:] --->: ", mz_I_Rel[:])
+        #print("mz_I_Rel_sorted[] --->: ", mz_I_Rel_sorted[:])
+
+
+
+        print(rawfile_path + " " + self.c.getRawfile_path())
+        print(rawfile_full_path_no_ext+" "+ self.c.getRawfile_full_path_no_ext() )
+
+
+
+        print(mz_I_Rel_sorted[0])
+        print(mz_I_Rel.index(mz_I_Rel_sorted[0]))
+        print(spectrum[mz_I_Rel.index(mz_I_Rel_sorted[0])+5])
+        print(spectrum.index(  spectrum[mz_I_Rel.index(mz_I_Rel_sorted[0])+5])   )
+
+
+
+    if args['--cryo_em'] == True:
+        version = src.PythonCodes.DataManage_common.DataManage_version()
+    if args['--spectroscopy'] == True:
+        version = src.PythonCodes.DataManage_common.MolRefAnt_version()
+
+
 BEGIN IONS
 PEPMASS=371.101196289063
 CHARGE=1

@@ -17,12 +17,12 @@ Arguments:
   --build_cuda or --clean_build_cuda and --cudaver=V10.2.89
 
 Options:
-  --with_while_loop=WITH_WHILE_LOOP  Use while loops
-  --plot_asc=PLOT_ASC                Plot asc file
-  --csvfile=CSV_FILE                 csv file to be analyzed
-  --quantum_computing=QUANTUM_COMPUTING
-  --help -h                          Show this help message and exit.
-  --version                          Show version.
+    --with_while_loop=WITH_WHILE_LOOP  Use while loops
+    --plot_asc=PLOT_ASC                Plot asc file
+    --csvfile=CSV_FILE                 csv file to be analyzed
+    --quantum_computing=QUANTUM_COMPUTING
+    --help -h                          Show this help message and exit.
+    --version                          Show version.
 '''
 # system imports
 import os

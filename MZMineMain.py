@@ -11,21 +11,26 @@ Usage:
     MZMineMain.py [--rawfile=RAW_FILE]
                   [--scan_number=SCAN_NUMBER]
                   [--RT=RET_TIME]
+                  [--import_db=IMPORT_DB]
+                  [--export_db=EXPORT_DB]
 
 NOTE: select and option
 
 Arguments: Either choose the --scan_number or the retention tim --RT
 
 Options:
-  --rawfile=RAW_FILE                 raw file to be analyzed
-  --scan_number=SCAN_NUMBER          scan number in the raw file
-  --RT=RET_TIME                      Retention time in the spectral sequence
-  --help -h                          Show this help message and exit.
-  --version                          Show version.
+    --rawfile=RAW_FILE                 raw file to be analyzed
+    --scan_number=SCAN_NUMBER          scan number in the raw file
+    --RT=RET_TIME                      Retention time in the spectral sequence
+    --import_db=IMPORT_DB              Database imports
+    --export_db=EXPORT_DB              DataBase Exports
+    --help -h                          Show this help message and exit.
+    --version                          Show version.
 '''
 # system imports
 import os
 import sys
+
 # path extension
 sys.path.append(os.path.join(os.getcwd(), '.'))
 sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes'))
@@ -36,6 +41,8 @@ import src.PythonCodes.src.Usage_Network
 import src.PythonCodes.utils.messageHandler
 import src.PythonCodes.utils.Command_line
 import src.PythonCodes.utils.MZmineModel_Analyser
+import src.PythonCodes.utils.MgfTransformer
+import src.PythonCodes.utils.DataBaseHandler
 from docopt import docopt
 
 #C:\Program Files\Python312\python.exe
@@ -59,6 +66,8 @@ if __name__ == "__main__":
     # system details
     #---------------------------------------------------------------------------
     # TODO: need to insert the system details but ot needed now
+    c.setApp_root(os.getcwd())
+    m.printMesgStr("Application root path         :", c.getCyan(), c.getApp_root())
     #---------------------------------------------------------------------------
     # Setting the variable into the common class
     #---------------------------------------------------------------------------
@@ -67,10 +76,10 @@ if __name__ == "__main__":
     l.createScan_number()
     l.createRet_time()
 
-    m.printMesgStr("This is the main program      : ", c.get_B_Magenta(), "MZMineMain.py")
+    m.printMesgStr("This is the main program      :", c.get_B_Magenta(), "MZMineMain.py")
     if args["--rawfile"]:
         l.createRAW_file()
-        m.printMesgStr("Raw file that will be analyzed: ", c.getYellow(), c.getRAW_file())
+        m.printMesgStr("Raw file that will be analyzed:", c.getYellow(), c.getRAW_file())
         raw_Analyser = src.PythonCodes.utils.MZmineModel_Analyser.MZmineModel_Analyser(c, m)
         if args["--scan_number"]:
             scan_number = c.getScan_number()   # 2081
@@ -80,9 +89,24 @@ if __name__ == "__main__":
             rc, mz_I_Rel, mz_I_Rel_sorted = raw_Analyser.extract_sequence_from_spec(spectrum)
             #Graphing output
             rc = raw_Analyser.make_histogram(mz_I_Rel)
-
-
-
+            # now getting the MgfTransformer class to transform the scanned
+            mgfTranformer = src.PythonCodes.utils.MgfTransformer.MgfTransformer(c, m)
+            rc = mgfTranformer.write_spectrum_to_json(spectrum=spectrum,
+                                                      mz_I_Rel=mz_I_Rel,
+                                                      mz_I_Rel_sorted=mz_I_Rel_sorted)
+    if args["--import_db"]:
+        l.createImport_db()
+        m.printMesgStr("Database to be imported       :", c.getYellow(), c.getImport_db())
+        database_handler = src.PythonCodes.utils.DataBaseHandler.DataBaseHandler(c, m, db_action="import_db")
+        rc = database_handler.read_database_file(c.getDatabase_file())
+        rc, molecule_number_lst = database_handler.create_molecule_dictionary()
+        rc = database_handler.create_molecule_jsonfiles_from_molecules_dict()
+        # TODO: call methods here
+    if args["--export_db"]:
+        l.createExport_db()
+        m.printMesgStr("Database to be exported       :", c.getYellow(), c.getExport_db())
+        database_handler = src.PythonCodes.utils.DataBaseHandler.DataBaseHandler(c, m, db_action="export_db")
+        # TODO: call methods here
     # ---------------------------------------------------------------------------
     # [Final] overall return code
     # ---------------------------------------------------------------------------

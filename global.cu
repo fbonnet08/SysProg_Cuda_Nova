@@ -65,11 +65,11 @@ int global::_initialize() {
   rc = _initialize_resources_avail(s_resources_avail);       if (rc != RC_SUCCESS) {rc = RC_WARNING;}
   rc = _initialize_systemDetails(s_systemDetails);           if (rc != RC_SUCCESS) {rc = RC_WARNING;}
   /* network data structure initialisation */
-  rc = _initialize_machine_struct(s_machine_struct);         if (rc != RC_SUCCESS) {rc = RC_WARNING;}
+  rc = _initialize_machine_struct(s_machine_struct);            if (rc != RC_SUCCESS) {rc = RC_WARNING;}
   rc = _initialize_IPAddresses_struct(s_IPAddresses_struct); if (rc != RC_SUCCESS) {rc = RC_WARNING;}
-  rc = _initialize_adapters_struct(s_adapters_struct);       if (rc != RC_SUCCESS) {rc = RC_WARNING;}
-  rc = _initialize_socket_struct(s_socket_struct);           if (rc != RC_SUCCESS) {rc = RC_WARNING;}
-  rc = _initialize_network_struct(s_network_struct);         if (rc != RC_SUCCESS) {rc = RC_WARNING;}
+  rc = _initialize_adapters_struct(s_adapters_struct);         if (rc != RC_SUCCESS) {rc = RC_WARNING;}
+  rc = _initialize_socket_struct(s_socket_struct);              if (rc != RC_SUCCESS) {rc = RC_WARNING;}
+  rc = _initialize_network_struct(s_network_struct);           if (rc != RC_SUCCESS) {rc = RC_WARNING;}
   /* unit test data structure initialisation */
   rc = _initialize_unitTest(s_unitTest);                     if (rc != RC_SUCCESS) {rc = RC_WARNING;}
   return rc;

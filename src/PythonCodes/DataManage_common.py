@@ -45,6 +45,9 @@ import inspect
 def DataManage_version():
     datamanage_version = "1.0"
     return datamanage_version
+def MolRefAnt_version():
+    molrefant_version = "0.0.1"
+    return molrefant_version
 #-------------------------------------------------------------------------------
 # DataManage_krnl_gpu.soVersioning of the DataManage application
 #-------------------------------------------------------------------------------
@@ -85,7 +88,8 @@ class DataManage_common:
         self.data_path = "./"
         self.gainmrc = "./"
         self.targetdir = "./"
-        self.software = "EPU-2.10.5\+"
+        self.sourcedir = "./"
+        self.software = "specify_if_needed" # "EPU-2.10.5\+"
         self.poolify = "no"
         self.superRes = "no"
         self.movies_ext = "mrc"
@@ -214,6 +218,19 @@ class DataManage_common:
         self.csvfile = "netUse.csv"
         self.rawfile = "mzmineRaw.raw"
         self.mgffile = "mzmineRaw.mgf"
+
+        self.rawfile_path = "."+os.sep
+        self.rawfile_full_path_no_ext = "."+os.sep
+
+        self.import_db = "full_path/some_db.txt"
+        self.export_db = "full_path/some_db.txt"
+        self.database_path = "./"
+        self.database_name = "some_db"
+        self.database_full_path_no_ext = "./some_db"
+        self.database_file = "some_db.txt"
+
+        self.file_basename = "file_basename"
+
         self.quantum_computing = "no"
         self.scan_number = 1
         self.Ret_time = 1.23
@@ -258,6 +275,7 @@ class DataManage_common:
         #Name of the logfile
         self.logfilename        = "dataManages.log"
         self.logGatan_PC_K3_GUI = "gatan_PC_K3_GUIs.log"
+        self.logMolRefAnt_DB_GUI = "molrefant_DB_GUIs.log"
 
         self.logQuantumComputing = "quantumComputing.log"
 
@@ -431,7 +449,7 @@ class DataManage_common:
         self.gainmrc = gainmrc
     def setTargetdir(self, targetdir):
         self.targetdir = targetdir
-    #software = self.software_SP 
+    #software = self.software_SP
     def setSoftware(self, software):
         self.software = software
     #Marker variables doBenchMarking = self.doBenchMarking.get()
@@ -822,9 +840,57 @@ class DataManage_common:
         self.begin_ions = begin_ions
     def setEnd_Ions(self, end_ions):
         self.end_ions = end_ions
+    def setSourcedir(self, sourcedir):
+        self.sourcedir = sourcedir
+    def setRawfile_path(self, rawfile_path):
+        self.rawfile_path = rawfile_path
+    def setRawfile_full_path_no_ext(self, rawfile_full_path_no_ext):
+        self.rawfile_full_path_no_ext = rawfile_full_path_no_ext
+    # --import_db=IMPORT_DB
+    def setImport_db(self, import_db):
+        self.import_db = import_db
+    # --export_db=EXPORT_DB
+    def setExport_db(self, export_db):
+        self.export_db = export_db
+    def setDatabase_path(self, database_path):
+        self.database_path = database_path
+    def setDatabase_name(self, database_name):
+        self.database_name = database_name
+    def setDatabase_full_path_no_ext(self, database_full_path_no_ext):
+        self.database_full_path_no_ext = database_full_path_no_ext
+    def setDatabase_file(self, database_file):
+        self.database_file = database_file
+    def setFile_basename(self, file_basename):
+        self.file_basename = file_basename
     #---------------------------------------------------------------------------
     # [Getters]: methods
     #---------------------------------------------------------------------------
+    def getFile_basename(self):
+        return self.file_basename
+    # --import_db=IMPORT_DB
+    def getImport_db(self):
+        return self.import_db
+    # --export_db=EXPORT_DB
+    def getExport_db(self):
+        return self.export_db
+    def getDatabase_path(self):
+        return self.database_path
+    def getDatabase_name(self):
+        return self.database_name
+    def getDatabase_full_path_no_ext(self):
+        return self.database_full_path_no_ext
+    def getRawfile_path(self):
+        return self.rawfile_path
+    def getDatabase_file(self):
+        return self.database_file
+    def setDatabase_file(self, database_file):
+        self.database_file = database_file
+    def setDatabase_file(self, database_file):
+        self.database_file = database_file
+    def getRawfile_full_path_no_ext(self):
+        return self.rawfile_full_path_no_ext
+    def getSourcedir(self):
+        return self.sourcedir
     def getBegin_Ions(self):
         return self.begin_ions
     def getEnd_Ions(self):
@@ -998,9 +1064,12 @@ class DataManage_common:
     #log filename for DataManageApp
     def getLogfileName(self):
         return self.logfilename
-    #log filename for DataManageApp
+    #log filename for Gatan_PC_K3_GUI
     def getLogGatan_PC_K3_GUI(self):
         return self.logGatan_PC_K3_GUI
+    #log filename
+    def getLogMolRefAnt_DB_GUI(self):
+        return self.logMolRefAnt_DB_GUI
     #log filename for DataManageApp
     def getLogQuantumComputing(self):
         return self.logQuantumComputing

@@ -195,7 +195,8 @@ class MathematicalModel_Analyser:
         self.m.printMesgAddStr("Last time stamp transfer   --->: ", self.c.getYellow(), last_time_stamp)
         boxScatter_file = targetdir+"/"+"transfer_plots_" + some_time + \
                           self.get_filename_postfix(filename_without_ext) + ".png"
-        plt.savefig(boxScatter_file, dpi=300)
+        basewidth = 300
+        plt.savefig(boxScatter_file, dpi=basewidth)
         self.m.printMesgAddStr("Scatter/Box plot saved to  --->: ", self.c.getMagenta(), boxScatter_file)
         
         return rc

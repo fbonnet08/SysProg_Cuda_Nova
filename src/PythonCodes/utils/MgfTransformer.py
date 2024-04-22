@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 '''!\file
-   -- DataManage addon: (Python3 code) class for handling MZMine files
+   -- DataManage addon: (Python3 code) class for transforming the mgf files
+                                      to database files
       \author Frederic Bonnet
-      \date 03rd of March 2024
+      \date 19th of April 2024
 
-      Universite de Perpignan March 2024, OBS
+      Universite de Perpignan March 2024, OBS.
 
 Name:
 ---
-Command_line: class MZmineModel_Analyser for analyzing raw files, can be called
-from the GUI interfaces.
+Command_line: class MgfTransformer for transforming the mgf files to database files
 
 Description of classes:
 ---
-This class generates an object and files used in the MgfTransformer class
+This class generates files
 
 Requirements (system):
 ---
@@ -29,30 +29,26 @@ Requirements (system):
 '''
 # System imports
 import sys
-#import psutil
-#import time
 import datetime
 import os
 import operator
-
 import numpy
-import pandas
-import seaborn
-#import csv
-#import rawpy
-#import scipy
-# plotting imports
-import matplotlib.pyplot as plt
-#import matplotlib.dates as mdates
+import json
 
+#application imports
 import src.PythonCodes.DataManage_common
 
 # Path extension
 sys.path.append(os.path.join(os.getcwd(), '.'))
 sys.path.append(os.path.join(os.getcwd(), '..'))
 #Application imports
+import src.PythonCodes.utils.JSonLauncher
+import src.PythonCodes.utils.JSonScanner
+import src.PythonCodes.utils.JSonCreator
+import src.PythonCodes.utils.StopWatch
+import src.PythonCodes.utils.progressBar
 # Definiiton of the constructor
-class MZmineModel_Analyser:
+class MgfTransformer:
     #---------------------------------------------------------------------------
     # [Constructor] for the
     #---------------------------------------------------------------------------
@@ -63,15 +59,16 @@ class MZmineModel_Analyser:
         self.c = c
         self.m = m
         self.app_root = self.c.getApp_root()
-        self.m.printMesgStr("Instantiating the class       : ", self.c.getGreen(), "MZmineModel_Analyser")
+        self.m.printMesgStr("Instantiating the class       : ", self.c.getGreen(), "MgfTransformer")
 
         #gettign the csv file
         self.ext_asc = ".asc"
         self.ext_csv = ".csv"
         self.ext_mgf = ".mgf"
-        self.ext_png = ".png"
+        self.ext_json = ".json"
         self.csv_len = 0
         self.csv_col = 0
+        self.zerolead = 0
         self.rows = []
         #initialising the lists
         self.indnx = []
@@ -111,8 +108,10 @@ class MZmineModel_Analyser:
         self.rawfile_full_path = self.c.getRAW_file()
 
         self.rawfile_path = os.path.dirname(self.rawfile_full_path)
+        self.c.setRawfile_path(self.rawfile_path)
 
         self.rawfile_full_path_no_ext = os.path.splitext(self.rawfile_full_path)[0]
+        self.c.setRawfile_full_path_no_ext(self.rawfile_full_path_no_ext)
         self.rawfile = os.path.basename(self.rawfile_full_path)
         self.basename = self.rawfile.split('.')[0]
         ext = ""
@@ -134,136 +133,18 @@ class MZmineModel_Analyser:
         # printing the files:
         self.printFileNames()
 
-        # TODO: need a raw file reader maybe later, right now the conversion is done via MZmine3
-        #       rc, self.raw_len = self.read_raw_file(self.rawfile_full_path)
         #-----------------------------------------------------------------------
         # [Constructor-end] end of the constructor
         #-----------------------------------------------------------------------
     #---------------------------------------------------------------------------
     # [Driver]
     #---------------------------------------------------------------------------
-    def make_histogram(self, mz_I_Rel_lst):
-        rc = self.c.get_RC_SUCCESS()
-        __func__= sys._getframe().f_code.co_name
-        self.m.printMesgStr("Graphing            (spectrum): ", self.c.getGreen(), __func__)
-
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="mz")
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="intensity")
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="relative")
-        # scatter and spectrum plots
-        rc = self.plot_spectrum_and_boxplots(mz_I_Rel_lst, self.file_mgf)
-
-        return rc
     #---------------------------------------------------------------------------
     # [Plotters]
     #---------------------------------------------------------------------------
-    def plot_spectrum_and_boxplots(self, mz_I_Rel_lst, setname):
-        rc = self.c.get_RC_SUCCESS()
-        __func__= sys._getframe().f_code.co_name
-        self.m.printMesgStr("Graphing spec & box (spectrum): ", self.c.getGreen(), __func__)
-        n_all_means = len(mz_I_Rel_lst[:])
-        filename_without_ext = os.path.splitext(setname)[0]
-
-        fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 7))
-        #Boxplot of the data
-        axes[0].set_title("Intensity (max): " + str(self.sample_max) + \
-                          ", PepMass: "+"{0:>12.4f}".format(float(self.c.getPepMass())) )
-        #Scatter plot data
-        mz = []
-        intensity = []
-        relative = []
-        for item in mz_I_Rel_lst[:]:
-                mz.append(item[0])
-                intensity.append(item[1])
-                relative.append(item[2])
-
-        xaxis_cnt_entries_lst = []
-        for i in range(len(mz)): xaxis_cnt_entries_lst.append(i)
-
-        data = [mz, ]
-        bp1 = axes[0].boxplot(data) #newnumber)
-        axes[0].legend([bp1["boxes"][0]], ["mz ("+filename_without_ext+")"], loc='upper left')
-        axes[0].set_xlabel(filename_without_ext)
-        axes[0].set_ylabel("mz") #Fractions in Time
-        #self.m.printMesgAddStr("xaxis_[0:10]               --->: ", self.c.getMagenta(), xaxis_cnt_entries_lst[0:10])
-
-        title = "Charge: " + str(self.c.getCharge()) + \
-                ", MSLevel: " + str(self.c.getMSLevel()) + \
-                ", Scan#: " + str(self.c.getScan_number()) + \
-                ", RT: " + "{0:>8.4f}".format(float(self.c.getRet_time()))
-
-        axes[1].set_title(title)
-        axes[1].set_xlabel("mz")
-        axes[1].grid(True)
-        #axes[1].xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
-        axes[1].set_ylabel("Relative Abundance")
-        axes[1].annotate('n=%d'%n_all_means, xy=(0.05, 0.95), xycoords='axes fraction', fontsize=14)
-
-        #sc1 = axes[1].plot(mz, relative, color='magenta', linestyle='', marker='o', markersize=2)
-        sc1 = axes[1].stem(mz, relative, markerfmt=' ')
-
-        rc, zerolead = self.extract_ZeroLead(numpy.power(10, 4))
-        current_time = datetime.datetime.now()
-        format_time = current_time.strftime('%Y-%m-%d_%H:%M:%S')
-        file_format_time = current_time.strftime('%Y%m%d_%H%M%S')
-        filename = self.rawfile_path + os.sep +str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(zerolead)))) +"_" + \
-                   '{:03.2f}'.format(float(self.c.getRet_time()))+"_"+ \
-                   os.path.basename(os.path.normpath(self.rawfile_full_path_no_ext))+self.ext_png
-        #print("filename -->: ", filename)
-        #plt.show()
-        basewidth = 300
-        plt.savefig(filename, dpi=basewidth)
-        self.m.printMesgAddStr("Box/Stem plot saved to     --->: ", self.c.getMagenta(), filename)
-
-        return rc
-    def plot_Distr(self, mz_I_Rel_lst, setname, distr="mz"):
-        rc = self.c.get_RC_SUCCESS()
-        __func__= sys._getframe().f_code.co_name
-        self.m.printMesgStr("Graphing Distr      (spectrum): ", self.c.getGreen(), __func__ +" ---> "+ distr)
-        dataset = []
-        for item in mz_I_Rel_lst[:]:
-            match distr:
-                case "mz":        dataset.append(item[0])
-                case "intensity": dataset.append(item[1])
-                case "relative":  dataset.append(item[2])
-                case _:           dataset.append(item[0])
-        dataset_plot = pandas.DataFrame(dataset, columns = [setname])
-        dist = seaborn.displot(data=dataset_plot, x=setname,
-                               kde=True, kind="hist", bins = 100, aspect = 1.5)
-        title = "PepMass: "+str(self.c.getPepMass()) + \
-                ", Charge: " + str(self.c.getCharge()) + \
-                ", MSLevel: " + str(self.c.getMSLevel()) + \
-                ", Scan#: " + str(self.c.getScan_number()) + \
-                ", RT: " + str(self.c.getRet_time()) + " (min)" + \
-                ", Intensity (max): " + str(self.sample_max)
-        dist.set(xlabel=distr, ylabel="n counts").set(title=title)
-
-        #print(dataset[:])
-        plt.show()
-
-        return rc
     #---------------------------------------------------------------------------
     # [Handlers]
     #---------------------------------------------------------------------------
-    def get_filename_postfix(self,filename_without_ext):
-        rc = self.c.get_RC_SUCCESS()
-        __func__= sys._getframe().f_code.co_name
-        
-        #Strip ProjectName content from filename_without_ext to standardize
-        self.m.printMesgAddStr("filename_without_ext       --->: ", self.c.getMagenta(), filename_without_ext)
-        filename_without_ext_split = []
-        filename_without_ext_split = filename_without_ext.split("_")
-        self.m.printMesgAddStr("file_without_ext_split[:]  --->: ", self.c.getGreen(), filename_without_ext_split[:])
-        
-        #Initialiszing the variable to default value
-        filename_postfix = filename_without_ext
-        #Recasting the proper filename postfix
-        #filename_postfix = filename_without_ext_split[0] + "_" + \
-        #                   filename_without_ext_split[1] + "_" + \
-        #                   filename_without_ext_split[2]
-        filename_postfix = filename_without_ext_split[-1]
-        
-        return filename_postfix
     # --------------------------------------------------------------------------
     # [Extractor] extract the zerolead from a given list or length
     # --------------------------------------------------------------------------
@@ -288,44 +169,77 @@ class MZmineModel_Analyser:
         # ----------------------------------------------------------------------
         return rc, zerolead
         #---------------------------------------------------------------------------
+    # [Creator]
+    #---------------------------------------------------------------------------
+    def create_TableCount_JSon_file(self, table_list, table_count_list):
+        rc = self.c.get_RC_SUCCESS()
+
+        self.m.printMesg("Creating the table count json file...")
+        filename = os.path.join(self.getJSon_Table_write_path(),
+                                self.getJSon_Table_filename())
+        self.m.printMesgAddStr(" Filename          : ", self.c.getCyan(), filename)
+        try:
+            json_file = open(filename, 'w')
+            json_file.write("[\n")
+            json_file.write("    {\n")
+            progressBar = src.PythonCodes.utils.progressBar.ProgressBar()
+            for i in range(len(table_list)-1):
+                json_file.write("        \""+table_list[i]+"\": "+"\""+str(table_count_list[i])+"\",\n")
+                progressBar.update(1, len(table_list)-1)
+                progressBar.printEv()
+            self.m.printLine()
+            progressBar.resetprogressBar()
+            #-------------------------------------------------------------------
+            # [Loop-end]
+            #-------------------------------------------------------------------
+            # Adding the last line in
+            json_file.write("        \"" + table_list[len(table_list)-1] + "\": " + \
+                            "\"" + str(table_count_list[len(table_list)-1]) + "\"\n")
+            json_file.write("    }\n")
+            json_file.write("]\n")
+
+            json_file.close()
+        except IOError:
+            self.m.printMesgAddStr(" Filename          : ",
+                                   self.c.getCyan(), filename)
+            self.m.printMesgAddStr("                   : ",
+                                   self.c.getRed(), "cannot be written check"
+                                                    " if path exist")
+            exit(self.c.get_RC_FAIL())
+
+        return rc
     #---------------------------------------------------------------------------
     # [Writters]
     #---------------------------------------------------------------------------
+    def write_spectrum_to_json(self, spectrum, mz_I_Rel, mz_I_Rel_sorted):
+        rc = self.c.get_RC_SUCCESS()
+        __func__= sys._getframe().f_code.co_name
+        spectrum_len = len(spectrum[:])
+        mz_I_len = len(mz_I_Rel[:])
+        mz_I_Rel_sorted_len = len(mz_I_Rel_sorted[:])
+        self.m.printMesgStr("Extracting spectrum (file_mgf): ", self.c.getGreen(), __func__)
+        self.m.printMesgAddStr("[spectrum]:         length --->: ", self.c.getMagenta(), spectrum_len)
+        self.m.printMesgAddStr("[mz_I]:             length --->: ", self.c.getRed(), mz_I_len)
+        self.m.printMesgAddStr("[mz_I_Rel_sort]:    length --->: ", self.c.getGreen(), mz_I_Rel_sorted_len)
+        self.m.printMesgAddStr("[file_mgf]: retention time --->: ", self.c.getCyan(), self.c.getRet_time())
+        self.m.printMesgAddStr("[file_mgf]: scan number    --->: ", self.c.getYellow(), self.c.getScan_number())
+
+        msg = str(mz_I_Rel_sorted[0]) + self.c.getBlue() + " index ---> "+self.c.getMagenta()+str(mz_I_Rel.index(mz_I_Rel_sorted[0]))
+        self.m.printMesgAddStr("[mz_I_Rel_sorted[0]]       --->: ", self.c.getGreen(), msg)
+
+        self.m.printMesgAddStr("[index]                    --->: ", self.c.getMagenta(), "mz_I_Rel.index(mz_I_Rel_sorted[0])+5")
+        msg = str(spectrum[mz_I_Rel.index(mz_I_Rel_sorted[0])+5]) + self.c.getBlue() +\
+              " index ---> "+self.c.getMagenta()+str(spectrum.index(spectrum[mz_I_Rel.index(mz_I_Rel_sorted[0])+5]))
+        self.m.printMesgAddStr("[spectrum[index]           --->: ", self.c.getYellow(), msg)
+
+        jsonCreator = src.PythonCodes.utils.JSonCreator.JSonCreator(self.c, self.m)
+        rc = jsonCreator.create_MZ_Relative_JSon_file(self.c.getScan_number(),
+                                                      spectrum, mz_I_Rel, mz_I_Rel_sorted)
+
+        return rc
     #---------------------------------------------------------------------------
     # [Reader]
     #---------------------------------------------------------------------------
-    def read_raw_file(self, rawfile):
-        rc = self.c.get_RC_SUCCESS()
-        __func__= sys._getframe().f_code.co_name
-        raw_len = 0
-
-        try:
-            # TODO: need a reader for the raw file.
-            """
-            file = rawpy.imread(rawfile)
-            type(file)
-            csvreader = csv.reader(file)
-            rows = []
-            for row in csvreader: rows.append(row)
-            csv_len = len(rows)
-            if csv_len != 0:
-                csv_col = len(rows[0])
-            file.close()
-            """
-        except IOError:
-            rc = self.c.get_RC_WARNING()
-            print("[raw_len]: Could not open file:", rawfile, raw_len)
-            csv_len = 0
-            print("Return code: ", self.c.get_RC_FAIL())
-            exit(self.c.get_RC_FAIL())
-
-        #print("Read from file: ",csvfile, " ---> length csv_len: ", csv_len)
-        msg = self.c.getBlue() + "Read from file: " + \
-              self.c.getYellow()  + rawfile + \
-              self.c.getBlue() + " ---> length raw_len: "
-        self.m.printMesgAddStr(msg, self.c.getMagenta(), str(raw_len))
-
-        return rc, raw_len
     def read_mgf_file(self, mgf_file, scan, retention_time):
         rc = self.c.get_RC_SUCCESS()
         __func__= sys._getframe().f_code.co_name
@@ -498,5 +412,5 @@ class MZmineModel_Analyser:
         self.m.printMesgAddStr("[file_mgf]:     (mgf file) --->: ", self.c.getBlue(), self.c.getMGF_file())
         return rc
 #---------------------------------------------------------------------------
-# end of MZmineModel_Analyser
+# end of MgfTransformer
 #---------------------------------------------------------------------------

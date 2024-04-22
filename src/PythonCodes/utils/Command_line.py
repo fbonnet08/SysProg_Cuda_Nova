@@ -51,7 +51,7 @@ class Command_line:
         self.c = c
         self.m = m
         
-        self.m.printMesgStr("Instantiating the class       : ", self.c.getGreen(), "Command_line")
+        self.m.printMesgStr("Instantiating the class       :", self.c.getGreen(), "Command_line")
         #INitialising some of the basic file characters
         self.initialize()
     #---------------------------------------------------------------------------
@@ -85,6 +85,24 @@ class Command_line:
     #------------------------------------------
     #General command for args
     #------------------------------------------
+    # --import_db=IMPORT_DB
+    def createImport_db(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            IMPORT_DB = self.args['--import_db']
+        except:
+            IMPORT_DB = self.c.getImport_db()
+        self.c.setImport_db(IMPORT_DB)
+
+    # --export_db=EXPORT_DB
+    def createExport_db(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            EXPORT_DB = self.args['--export_db']
+        except:
+            EXPORT_DB = self.c.getExport_db()
+        self.c.setExport_db(EXPORT_DB)
+
     # --scan_number=SCAN_NUMBER
     def createScan_number(self):
         __func__ = sys._getframe().f_code.co_name
@@ -92,7 +110,7 @@ class Command_line:
         try:
             SCAN_NUMBER = self.args['--scan_number']
         except:
-            SCAN_NUMBER = self.c.getRet_time()
+            SCAN_NUMBER = self.c.getScan_number()
         self.c.setScan_number(SCAN_NUMBER)
 
     # --RT=RET_TIME
