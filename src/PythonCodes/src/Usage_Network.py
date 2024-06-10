@@ -135,16 +135,18 @@ class Usage_Network:
             self.m.printCMesgVal("" , self.c.getYellow(), df.to_string())
             
             ethernet_data = next((item for item in data if item["iface"] == "Ethernet"), None)
-            self.m.printCMesgVal("Ethr --->: " , self.c.getMagenta(), ethernet_data)
+            self.m.printCMesgVal("Ethr --->: ", self.c.getMagenta(), ethernet_data)
             wlan_data = next((item for item in data if item["iface"] == "WLAN"), None)
-            self.m.printCMesgVal("wlan --->: " , self.c.getRed(), wlan_data)
-            
-            if ethernet_data:
+            self.m.printCMesgVal("WLAN --->: ", self.c.getRed(), wlan_data)
+            vEthernet_data = next((item for item in data if item["iface"] == "vEthernet (WSL)"), None)
+            self.m.printCMesgVal("vEthr(WSL) --->: ", self.c.getRed(), vEthernet_data)
+
+            if ethernet_data != None:
                 upload_speed = ethernet_data["Upload Speed"]
                 download_speed = ethernet_data["Download Speed"]
                 self.m.printCMesgVal("Ethernet Upload Speed   --->: ", self.c.getGreen(), upload_speed)
                 self.m.printCMesgVal("Ethernet Download Speed --->: ", self.c.getYellow(), download_speed)
-                
+
                 # Extracting only the numerical part
                 upload_value, upload_unit = self.extract_speed(upload_speed)
                 self.m.printCMesgValMesg(self.c.getBlue(),"upload    Numerical value   : ",
@@ -152,16 +154,41 @@ class Usage_Network:
                 download_value, download_unit = self.extract_speed(download_speed)
                 self.m.printCMesgValMesg(self.c.getBlue(),"Downsload Numerical value   : ",
                                          self.c.getYellow(), '{:03.4f}'.format(download_value), " Unit: "+self.c.getMagenta()+str(download_unit))
-                
+
                 upload_MBs = self.get_MBytess(upload_value, upload_unit)
                 download_MBs = self.get_MBytess(download_value, download_unit)
-                
+
                 self.m.printCMesgValMesg(self.c.getBlue(),"upload    MBs               : ",
                                          self.c.getGreen(), '{:03.4f}'.format(upload_MBs), self.c.getMagenta()+" MB/s")
                 self.m.printCMesgValMesg(self.c.getBlue(),"Downsload MBs               : ",
                                          self.c.getYellow(), '{:03.4f}'.format(download_MBs), self.c.getMagenta()+" MB/s")
             else:
                 self.m.printMesg("Ethernet interface not found in the data.")
+
+            if wlan_data != None:
+                upload_speed = wlan_data["Upload Speed"]
+                download_speed = wlan_data["Download Speed"]
+                self.m.printCMesgVal("WLAN upload Speed       --->: ", self.c.getGreen(), upload_speed)
+                self.m.printCMesgVal("WLAN Download Speed     --->: ", self.c.getYellow(), download_speed)
+
+                # Extracting only the numerical part
+                upload_value, upload_unit = self.extract_speed(upload_speed)
+                self.m.printCMesgValMesg(self.c.getBlue(),"upload    Numerical value   : ",
+                                         self.c.getGreen(), '{:03.4f}'.format(upload_value), " Unit: "+self.c.getMagenta()+str(upload_unit))
+                download_value, download_unit = self.extract_speed(download_speed)
+                self.m.printCMesgValMesg(self.c.getBlue(),"Downsload Numerical value   : ",
+                                         self.c.getYellow(), '{:03.4f}'.format(download_value), " Unit: "+self.c.getMagenta()+str(download_unit))
+
+                upload_MBs = self.get_MBytess(upload_value, upload_unit)
+                download_MBs = self.get_MBytess(download_value, download_unit)
+
+                self.m.printCMesgValMesg(self.c.getBlue(),"upload    MBs               : ",
+                                         self.c.getGreen(), '{:03.4f}'.format(upload_MBs), self.c.getMagenta()+" MB/s")
+                self.m.printCMesgValMesg(self.c.getBlue(),"Downsload MBs               : ",
+                                         self.c.getYellow(), '{:03.4f}'.format(download_MBs), self.c.getMagenta()+" MB/s")
+            else:
+                self.m.printMesg("WLAN interface not found in the data.")
+
             #end of the if block
             # Now writing output to file
             # "2021-09-29_15:08:58","11.380353101754516E+21"

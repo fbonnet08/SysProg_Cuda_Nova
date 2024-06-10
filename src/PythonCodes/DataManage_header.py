@@ -177,7 +177,56 @@ def print_testcode_header(**kwargs):
     m.printCMesg(" *                                                                                  *", c.get_B_Yellow() )
     m.printCMesg(" ************************************************************************************", c.get_B_Yellow() )
     return
-
+#*******************************************************************************
+##\brief Python3 method.
+#The header for the live subroutine for the script
+#*******************************************************************************
+def print_MolRefAnt_DB_header(**kwargs):
+    #first retrieving the objects from the argument list
+    __func__= sys._getframe().f_code.co_name
+    c   = kwargs.get('common', None)
+    m   = kwargs.get('messageHandler', None)
+    m.printLine()
+    m.printCMesg(" ************************************************************************************", c.get_B_Yellow() )
+    m.printCMesg(" *                    python sript to run the LDMaP-App suite.                      *", c.get_B_Yellow() )
+    m.printCMesg(" *                                                                                  *", c.get_B_Yellow() )
+    m.printCMesg(" * XX   XX           XX    XXXXXX             XX     XX                             *", c.get_B_Yellow() )
+    m.printCMesg(" *  X   X             X     X    X           X        X              X              *", c.get_B_Yellow() )
+    m.printCMesg(" *  XX XX             X     X    X           X        X              X              *", c.get_B_Yellow() )
+    m.printCMesg(" *  XX XX   XXXXX     X     X    X  XXXXX   XXXX     X X   XX XX    XXXX            *", c.get_B_Yellow() )
+    m.printCMesg(" *  X X X  X     X    X     XXXXX  X     X   X       X X    XX  X    X              *", c.get_B_Yellow() )
+    m.printCMesg(" *  X X X  X     X    X     X  X   XXXXXXX   X      X   X   X   X    X     XXXXXXX  *", c.get_B_Yellow() )
+    m.printCMesg(" *  X   X  X     X    X     X  X   X         X      XXXXX   X   X    X              *", c.get_B_Yellow() )
+    m.printCMesg(" *  X   X  X     X    X     X   X  X     X   X      X   X   X   X    X  X           *", c.get_B_Yellow() )
+    m.printCMesg(" *  XXX XXX  XXXXX   XXXXX  XXX  XX  XXXXX   XXXX   XXX XXX XXX XXX    XX           *", c.get_B_Yellow() )
+    m.printCMesg(" *                                                                                  *", c.get_B_Yellow() )
+    m.printCMesg(" ************************************************************************************", c.get_B_Yellow() )
+    return
+#*******************************************************************************
+##\brief Python3 method.
+#The header for the live subroutine for the script
+#*******************************************************************************
+def print_MolRefAnt_DB_Scan_header(**kwargs):
+    #first retrieving the objects from the argument list
+    __func__= sys._getframe().f_code.co_name
+    c   = kwargs.get('common', None)
+    m   = kwargs.get('messageHandler', None)
+    m.printLine()
+    m.printCMesg(" ************************************************************************************", c.get_B_Yellow() )
+    m.printCMesg(" *                    python sript to run the LDMaP-App suite.                      *", c.get_B_Yellow() )
+    m.printCMesg(" *                                                                                  *", c.get_B_Yellow() )
+    m.printCMesg(" *XX   XX   XX      XX            XXXXX   XXXXXX           XXXXX                    *", c.get_B_Yellow() )
+    m.printCMesg(" *X   X     X       X             X   X   X    X         X     X                    *", c.get_B_Yellow() )
+    m.printCMesg(" *XX XX     X       X             X    X  X    X         X                          *", c.get_B_Yellow() )
+    m.printCMesg(" *XX XX     X      X X            X    X  X    X         X        XXXXX   XXXX      *", c.get_B_Yellow() )
+    m.printCMesg(" *X X X     X      X X            X    X  XXXXX           XXXXX  X     X      X     *", c.get_B_Yellow() )
+    m.printCMesg(" *X X X     X     X   X  XXXXXXX  X    X  X    X XXXXXXX       X X        XXXXX     *", c.get_B_Yellow() )
+    m.printCMesg(" *X   X     X     XXXXX           X    X  X    X               X X       X    X     *", c.get_B_Yellow() )
+    m.printCMesg(" *X   X     X     X   X           X   X   X    X         X     X X     X X    X     *", c.get_B_Yellow() )
+    m.printCMesg(" *XXX XXX  XXXXX  XXX XXX         XXXXX   XXXXXX           XXXXX   XXXXX   XXXX X   *", c.get_B_Yellow() )
+    m.printCMesg(" *                                                                                  *", c.get_B_Yellow() )
+    m.printCMesg(" ************************************************************************************", c.get_B_Yellow() )
+    return
 #*******************************************************************************
 ##\brief Python3 method.
 #The header for the live subroutine for the script

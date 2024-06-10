@@ -28,7 +28,8 @@ Requirements (system):
 # Date: 17/08/2017
 #-------------------------------------------------------------------------------
 #System tools
-import sys
+#import sys
+import datetime
 #-------------------------------------------------------------------------------
 # Timer handlers creaters and starters and reporters
 #-------------------------------------------------------------------------------
@@ -47,6 +48,7 @@ class StopWatch:
         self.diff_time = 0
         self.total_time = 0
         self.clock_sessions = 0
+        self.gtime = 1.0
         self.running = False
     #---------------------------------------------------------------------------
     # class methods
@@ -66,10 +68,7 @@ class StopWatch:
         # getting the platform dependent libarary dependence
         system = platform.system()
         class timeval(ctypes.Structure):
-            _fields_ = [
-                ("tv_sec", ctypes.c_long),
-                ("tv_usec", ctypes.c_long)
-            ]
+            _fields_ = [("tv_sec", ctypes.c_long), ("tv_usec", ctypes.c_long)]
         tv = timeval()
         
         if (system == 'Linux'):
@@ -82,11 +81,12 @@ class StopWatch:
             self.gtime = float(tv.tv_sec) + (float(tv.tv_usec) / 1000000)
         elif (system == 'Windows' or system != 'Darwin' or system != 'Linux'):
             _gettimeofday = ctypes.cdll.LoadLibrary("Kernel32.dll")
-
             #print("DataManage 1.0 is not supported under Windows")
             #print("Setting time to a constant value 1.0")
-
-            self.gtime = 1.0
+            #self.gtime = 1.0
+            t_sec = datetime.datetime.now().second
+            t_msec = datetime.datetime.now().microsecond
+            self.gtime = float(t_sec) + (float(t_msec) / 1000000)
 
         return self.gtime
 

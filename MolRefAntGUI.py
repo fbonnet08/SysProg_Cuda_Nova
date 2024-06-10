@@ -66,20 +66,18 @@ sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes'))
 sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes','utils'))
 sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes','utils','StateMachine'))
 #appending the utils path
-from src.PythonCodes.DataManage_common import *
-#platform, release  = whichPlatform()
-sysver, platform, system, release, node, processor, cpu_count = whichPlatform()
+#from src.PythonCodes.DataManage_common import *
+import src.PythonCodes.DataManage_common
+sysver, platform, system, release, node, processor, cpu_count = src.PythonCodes.DataManage_common.whichPlatform()
 #application methods
 from src.PythonCodes.docopt import docopt
 from src.PythonCodes.DataManage_fileIO import *
-#from DataManage_header import print_Gatan_PC_K3_header
 import src.PythonCodes.DataManage_header
-#from messageHandler import *
 import src.PythonCodes.utils.messageHandler
-#from DataManage_descriptors import *  #bring in the documentation
 import src.PythonCodes.DataManage_common
-#from simple_device import SimpleDevice
 import src.PythonCodes.utils.StateMachine.simple_device
+# Selenium imports
+import src.PythonCodes.utils.Bots_Selenium
 #import gui_ioChannel
 ################################################################################
 #                                                                              
@@ -1359,6 +1357,9 @@ class GatanFramesGainApp(object):
         global running
         running = True
         #self.scanning()
+        #-----------------------------------------------------------------------
+        # Getting the out to webpage
+        #-----------------------------------------------------------------------
 
         #declared but not needed just yet may need to turn this into a self
         showGUI = True
@@ -2759,6 +2760,13 @@ class MolRefAnt_DBGuiApp(object):
                       "--rawfile=" + self.c.getSourcedir() + os.sep + self.c.getRAW_file() + " " + \
                       "--scan_number=" + str(self.c.getScan_number())
         os.system('python %s'%path_python)
+
+        q2.put("Launching Web App MolRefAnt_DB ...\n")
+        bots_selenium = src.PythonCodes.utils.Bots_Selenium.Bots_Selenium()
+        print("[------------------MolRefAnt_App---------------------------]")
+        rc = bots_selenium.testing_MolRefAnt_App()
+        print("-------------------------------------")
+
         return
     ##\brief Python3 method.
     # LaunchGainRefCopyHandler class method to launch the DataManager application

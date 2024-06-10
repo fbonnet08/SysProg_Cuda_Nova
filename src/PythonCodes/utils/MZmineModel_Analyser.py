@@ -29,8 +29,6 @@ Requirements (system):
 '''
 # System imports
 import sys
-#import psutil
-#import time
 import datetime
 import os
 import operator
@@ -38,9 +36,6 @@ import operator
 import numpy
 import pandas
 import seaborn
-#import csv
-#import rawpy
-#import scipy
 # plotting imports
 import matplotlib.pyplot as plt
 #import matplotlib.dates as mdates
@@ -70,6 +65,9 @@ class MZmineModel_Analyser:
         self.ext_csv = ".csv"
         self.ext_mgf = ".mgf"
         self.ext_png = ".png"
+        self.ext_json = ".json"
+        self.undr_scr = "_"
+        self.dot = "."
         self.csv_len = 0
         self.csv_col = 0
         self.rows = []
@@ -111,9 +109,12 @@ class MZmineModel_Analyser:
         self.rawfile_full_path = self.c.getRAW_file()
 
         self.rawfile_path = os.path.dirname(self.rawfile_full_path)
+        self.c.setData_path(self.rawfile_path)
+        self.c.setTargetdir(self.rawfile_path)
 
         self.rawfile_full_path_no_ext = os.path.splitext(self.rawfile_full_path)[0]
         self.rawfile = os.path.basename(self.rawfile_full_path)
+        self.c.setProjectName(self.rawfile)
         self.basename = self.rawfile.split('.')[0]
         ext = ""
         if len(os.path.splitext(self.rawfile_full_path)) > 1: ext = os.path.splitext(self.rawfile_full_path)[1]
@@ -147,9 +148,9 @@ class MZmineModel_Analyser:
         __func__= sys._getframe().f_code.co_name
         self.m.printMesgStr("Graphing            (spectrum): ", self.c.getGreen(), __func__)
 
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="mz")
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="intensity")
-        #rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="relative")
+        rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="MnZ")
+        rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="Int")
+        rc = self.plot_Distr(mz_I_Rel_lst, self.file_mgf, distr="Rel")
         # scatter and spectrum plots
         rc = self.plot_spectrum_and_boxplots(mz_I_Rel_lst, self.file_mgf)
 
@@ -205,8 +206,10 @@ class MZmineModel_Analyser:
         rc, zerolead = self.extract_ZeroLead(numpy.power(10, 4))
         current_time = datetime.datetime.now()
         format_time = current_time.strftime('%Y-%m-%d_%H:%M:%S')
-        file_format_time = current_time.strftime('%Y%m%d_%H%M%S')
-        filename = self.rawfile_path + os.sep +str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(zerolead)))) +"_" + \
+        filename_prefix = "spectra_BoxStem"
+        file_format_time = 1 #current_time.strftime('%Y%m%d_%H%M%S')
+        filename = self.rawfile_path + os.path.sep + filename_prefix + self.undr_scr + \
+                   str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(zerolead)))) +"_" + \
                    '{:03.2f}'.format(float(self.c.getRet_time()))+"_"+ \
                    os.path.basename(os.path.normpath(self.rawfile_full_path_no_ext))+self.ext_png
         #print("filename -->: ", filename)
@@ -223,13 +226,14 @@ class MZmineModel_Analyser:
         dataset = []
         for item in mz_I_Rel_lst[:]:
             match distr:
-                case "mz":        dataset.append(item[0])
-                case "intensity": dataset.append(item[1])
-                case "relative":  dataset.append(item[2])
-                case _:           dataset.append(item[0])
-        dataset_plot = pandas.DataFrame(dataset, columns = [setname])
+                case "MnZ": dataset.append(item[0])
+                case "Int": dataset.append(item[1])
+                case "Rel": dataset.append(item[2])
+                case _:     dataset.append(item[0])
+
+        dataset_plot = pandas.DataFrame(dataset, columns=[setname])
         dist = seaborn.displot(data=dataset_plot, x=setname,
-                               kde=True, kind="hist", bins = 100, aspect = 1.5)
+                               kde=True, kind="hist", bins=200, aspect=1.5)
         title = "PepMass: "+str(self.c.getPepMass()) + \
                 ", Charge: " + str(self.c.getCharge()) + \
                 ", MSLevel: " + str(self.c.getMSLevel()) + \
@@ -238,8 +242,20 @@ class MZmineModel_Analyser:
                 ", Intensity (max): " + str(self.sample_max)
         dist.set(xlabel=distr, ylabel="n counts").set(title=title)
 
-        #print(dataset[:])
-        plt.show()
+        rc, zerolead = self.extract_ZeroLead(numpy.power(10, 4))
+        current_time = datetime.datetime.now()
+        format_time = current_time.strftime('%Y-%m-%d_%H:%M:%S')
+        filename_prefix = "spectra_Distrib_"+distr+self.undr_scr
+        file_format_time = 1 #current_time.strftime('%Y%m%d_%H%M%S')
+        filename = self.rawfile_path + os.path.sep + filename_prefix + self.undr_scr + \
+                   str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(zerolead)))) +"_" + \
+                   '{:03.2f}'.format(float(self.c.getRet_time()))+"_"+ \
+                   os.path.basename(os.path.normpath(self.rawfile_full_path_no_ext))+self.ext_png
+        #print("filename -->: ", filename)
+        #plt.show()
+        basewidth = 300
+        plt.savefig(filename, dpi=basewidth)
+        self.m.printMesgAddStr("Distribution plot saved to --->: ", self.c.getMagenta(), filename)
 
         return rc
     #---------------------------------------------------------------------------

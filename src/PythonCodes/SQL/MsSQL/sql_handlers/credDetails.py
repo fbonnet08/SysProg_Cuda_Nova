@@ -23,14 +23,27 @@ Requirements (application):
 ---
 '''
 import getpass
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # [WIN-I0E9QBHS21\SQLEXPRESS2019]
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #server = '132.229.105.89\SQLEXPRESS2019'
-server = '132.229.105.71\SQLEXPRESS2019'#TODO: need to DataMange_namespace or DataManage_config imports
+#server = '132.229.105.71\SQLEXPRESS2019' #TODO: need to DataMange_namespace or DataManage_config imports
+server = 'DESKTOP-GPI5ERK\SQLEXPRESS2019'       #TODO: need to DataMange_namespace or DataManage_config imports
 database = 'NeCENDatabase-Prod'
-username = input("Username: ")#
-password = getpass.getpass(prompt='Enter DataBase password:')#
+username = "quarky" # input("Username: ")            #
+password = "password"  # getpass.getpass(prompt='Enter DataBase password:')
+# ------------------------------------------------------------------------------
+# TODO: [Remote-access] Remote access from non windows machine needs to be fixed
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# [PostGreSQL]
+# ------------------------------------------------------------------------------
+server_PostGreSQL = '127.0.0.1'           # 'palpostgres.obs-banyuls.fr'     # '127.0.0.1'
+database_PostGreSQL = "MolRefAnt_DB_PostGreSQL" # "test_MolRefAnt_DB_PostGreSQL" #
+schema_PostGreSQL = "MolRefAnt_DB"
+username_PostGreSQL = "frederic"          # "MolRefAnt_DB_PostGreSQL_admin"  # "frederic"
+password_PostGreSQL = "postgre23"         # "H1&5j5^D_P5v+}"                 # "postgre23"
+port_PostGreSQL = '5432'                  #'4604'                            # '5432'
 #-------------------------------------------------------------------------------
 # TODO: [Remote-access] Remote access from non windows machine needs to be fixed
 #-------------------------------------------------------------------------------

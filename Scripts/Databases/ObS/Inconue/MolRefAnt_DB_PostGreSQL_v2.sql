@@ -133,6 +133,17 @@ create table if not exists
                                filename VARCHAR(50),
                                PRIMARY KEY(analytic_data_id, date_id)
 );
+INSERT INTO "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Analytics_data (
+    analytic_data_id,
+    date_id,
+    sample_name,
+    sample_details,
+    sample_solvent,
+    number_scans,
+    filename
+)
+VALUES
+    (1, 1, 'sample 1', 'details 1', 'solvent 1', '4114', 'filename.raw');
 
 drop table if exists "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Database cascade;
 create table if not exists
@@ -295,5 +306,10 @@ create table if not exists
                           FOREIGN KEY(tool_id) REFERENCES "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Tool(tool_id),
                           FOREIGN KEY(analytic_data_id, date_id) REFERENCES "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Analytics_data(analytic_data_id, date_id)
 );
+
+
+INSERT INTO "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".DateTable (date_id, date_column, time_column, timestamp_with_tz_column, analytic_data_id, date_id_1)
+VALUES
+    (1, '2024-04-19', '13:30:00', '2024-04-19 13:30:00', 1, 1);
 
 

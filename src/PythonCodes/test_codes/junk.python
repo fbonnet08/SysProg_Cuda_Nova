@@ -1,4 +1,530 @@
 
+            # TODO: remove the the exit(rc) statement after the jsonn file have been done correctly
+            #exit(rc)
+            # TODO: once removed you may continue with the database pushing
+
+
+        print (type(gpu_number))
+        print(gpu_number)
+
+                print('setting the use_gpu to :', use_gpu)
+                print('setting the device number to:', gpu_number)
+
+
+        print("use gpu  true oir false ---->: ", self.c.getUse_gpu())
+        print("which gpu device number ---->: ", self.c.getSet_gpu())
+
+
+    def get_platform(self):
+        if sys.platform.startswith('linux'):
+            return 'linux'
+        elif sys.platform.startswith('win32'):
+            return 'win32'
+        elif sys.platform.startswith('cygwin'):
+            return 'cygwin'
+        elif sys.platform.startswith('darwin'):
+            return 'darwin'
+        else:
+            return sys.platform
+
+
+
+
+
+                    '''
+                    for j in range(len(metaData[i][:])):
+                    print("metaData["+str(i)+"] --->: ", metaData[i][j])
+
+                    '''
+                    #print(" idata['metaData'] --->: ", idata['metaData']['name'])
+
+
+
+        start_key = "FILENAME"
+
+        end_key = "END IONS"
+        trigger_key = "Scan#: "   # "PEPMASS"
+        # Replacement keys
+        FEATURE_ID_key = "FEATURE_ID"
+        SPECTRUMID_key = "SPECTRUMID"
+        TAXONOMY_key = "TAXONOMY"
+        SCANS_key = "SCANS"
+        SCAN_ID_key = "SCAN_ID"
+        LIBRARYQUALITY_key = "LIBRARYQUALITY"
+        LIBRARY_QUALITY_key = "LIBRARY_QUALITY"
+        CHARGE_key = "CHARGE"
+        SMILES_key = "SMILES"
+        NAME_key = "NAME"
+        SYNNO_key = "SYNNO"
+
+
+
+
+
+
+            # TODO: 5. Spectral data insert table
+            #rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='spectral_data', silent=True)
+            table_length = int(tb_count) + 1
+            '''
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Spectral_data(file_sql,
+                                                                    queryMsSQL, cursor,
+                                                                    jsonfile_content_dict_lst[ifile],
+                                                                    jsonfile_content_key[ifile],
+                                                                    jsonfile_content_value[ifile],
+                                                                    database, table, table_length)
+            '''
+            # TODO: 6. insert compound from spectral_id
+            rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='compound', silent=True)
+            table_length = int(tb_count) + 1
+            #print("tb_count --->: ", tb_count)
+
+
+            # TODO: 7. insert platform_user for pi_name_id and datacollector_id
+            #rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='platform_user', silent=True)
+            table_length = int(tb_count)
+            '''
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Platform_user(file_sql,
+                                                                    queryMsSQL, cursor,
+                                                                    jsonfile_content_dict_lst[ifile],
+                                                                    database, 'platform_user', table_length)
+            '''
+
+
+
+
+    if '.mgf' in filenames:
+        #print("dirpath   --->: ", dirpath)
+        #print("dirname   --->: ", dirname)
+        print("filenames --->: ", filenames)
+
+
+
+            #-           -
+            #-      (1)-
+            #- (1)     -
+
+
+            rc, tb_count = queryMsSQL.query_PostGreSQL_GetTableCount(cursor=cursor,
+                                                                     database=self.c.getDatabase_name(),
+                                                                     schema=self.c.getDatabase_schema(),
+                                                                     table='ionisation_mode', silent=True)
+
+            print(" MolRefAnt_DB_POstGresSQLWritter_Tool +--->: ", tb_count)
+
+
+
+            print("i_jsonfile_content_key   --> ", i_jsonfile_content_key[:])
+            print("i_jsonfile_content_value --> ", i_jsonfile_content_value[:])
+            print("database --> ", database)
+            print("start_spectral_data_INDX --> ", start_spectral_data_INDX)
+
+
+
+
+    def MolRefAnt_DB_POstGresSQLWritter_Spectral_data(self, file_hdl,
+                                                      queryMsSQL, cursor,
+                                                      i_jsonfile_content_dict,
+                                                      i_jsonfile_content_key,
+                                                      i_jsonfile_content_value,
+                                                      database, table, table_length):
+        __func__= sys._getframe().f_code.co_name
+        rc = self.c.get_RC_SUCCESS()
+
+        #self.m.printMesgAddStr("i_jsonfile_content_value[:]) == len(i_jsonfile_content_key[:]", self.c.getGreen(), "continuing ...")
+
+        # check the sizes of the lists are the same, if not that is not good
+        if len(i_jsonfile_content_value[:]) != len(i_jsonfile_content_key[:]):
+            self.m.printMesgAddStr("i_jsonfile_content_value[:]) != len(i_jsonfile_content_key[:]", self.c.getRed(), "exiting ...")
+            rc = self.c.get_RC_FAIL()
+            exit(rc)
+
+        start_spectral_data_INDX = table_length - 1  # this make sure of c++ format
+        insertion_point = start_spectral_data_INDX + int(i_jsonfile_content_value[0])
+
+        '''
+        #print("i_jsonfile_content_dict --> ", i_jsonfile_content_dict['PEPMASS'])
+        #print("i_jsonfile_content_key   --> ", i_jsonfile_content_key[:])
+        print("i_jsonfile_content_value --> ", i_jsonfile_content_value[:])
+        print("database --> ", database)
+        print("schema --> ", self.c.getDatabase_schema())
+        print("table --> ", table)
+        print("table_length --> ", table_length)
+        print("start_spectral_data_INDX --> ", start_spectral_data_INDX)
+        print("insertion_point --> ", insertion_point)
+        '''
+        file_hdl.write("insert into\n")
+        file_hdl.write("    \""+database+"\".\""+self.c.getDatabase_schema()+"\"."+table+"(\n")
+        file_hdl.write("    spectral_data_id,\n")                         # TODO: ---> Done
+        file_hdl.write("    feature_id,\n")                               # TODO: ---> Done
+        file_hdl.write("    pepmass,\n")                                  # TODO: ---> Done
+        file_hdl.write("    mslevel,\n")                                  # TODO: ---> Done
+        file_hdl.write("    scan_number,\n")                              # TODO: ---> Done
+        file_hdl.write("    retention_time,\n")                           # TODO: ---> Done
+        file_hdl.write("    mol_json_file,\n")                            # TODO: ---> Done
+        file_hdl.write("    num_peaks, peaks_list,\n")                    # TODO: ---> Done
+        file_hdl.write("    ionmodechem_id,\n")                           # TODO: ---> Done
+        file_hdl.write("    charge_id,\n")                                # TODO: ---> Done
+        file_hdl.write("    tool_id,\n")                                  # TODO: ---> Done
+        file_hdl.write("    database_id, data_id)\n")                     # TODO: ---> Done
+        file_hdl.write("VALUES (\n")
+        file_hdl.write(str(insertion_point)+",\n")
+        file_hdl.write("'"+str(i_jsonfile_content_dict['FEATURE_ID'])+"',\n")
+        file_hdl.write(str(i_jsonfile_content_dict['PEPMASS'])+",\n")
+        file_hdl.write("'"+str(i_jsonfile_content_dict['MSLEVEL'])+"',\n")
+        file_hdl.write("null,\n")
+        file_hdl.write("null,\n")
+        file_hdl.write("'"+str(i_jsonfile_content_dict['molecule_json_filename'])+"',\n")
+        # NumPeaks and peak list
+        file_hdl.write("null,\n")
+        file_hdl.write("null,\n")
+        rc, ionmodechem_id = queryMsSQL.query_GetIonModeChem_Id(cursor=cursor,
+                                                                ionmodechem=i_jsonfile_content_dict['IONMODE'])
+        file_hdl.write(str(ionmodechem_id)+",\n")
+        # TODO: get the charge ID here from a query
+        rc, charge_id = queryMsSQL.query_GetCharge_Id(cursor=cursor,
+                                                      charge=i_jsonfile_content_dict['CHARGE'])
+        #print("charge_id ---->: ", charge_id)
+        file_hdl.write(str(charge_id)+",\n")
+        # TODO: get the tool_id from a query
+
+        rc, tool_id = queryMsSQL.query_GetTool_Id(cursor=cursor,
+                                                  tool=i_jsonfile_content_dict['SOURCE_INSTRUMENT'])
+        file_hdl.write(str(tool_id)+",\n")
+        # TODO: get the database_id from query
+        rc, database_id = queryMsSQL.query_GetDatabase_Id(cursor=cursor,
+                                                          database=i_jsonfile_content_dict['database_name'])
+        file_hdl.write(str(database_id)+",\n")
+        # TODO: get the data_id from query
+        rc, data_id = queryMsSQL.query_GetData_Id(cursor=cursor,
+                                                  molecule_json_filename=i_jsonfile_content_dict['molecule_json_filename'])
+        file_hdl.write(str(data_id)+"\n")
+
+        file_hdl.write(");\n")
+
+        return rc
+
+
+
+
+            # TODO: 5. Spectral data insert table
+            #rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='spectral_data', silent=True)
+            table_length = int(tb_count) + 1
+            '''
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Spectral_data(file_sql,
+                                                                    queryMsSQL, cursor,
+                                                                    jsonfile_content_dict_lst[ifile],
+                                                                    jsonfile_content_key[ifile],
+                                                                    jsonfile_content_value[ifile],
+                                                                    database, table, table_length)
+            '''
+
+
+
+
+            # TODO: 4. insert datetable for date_id insert this method into analytics_data insertion.
+            '''
+            rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='datetable', silent=True)
+            table_length = cnt_date + int(tb_count)
+            #print("tb_count --->: ", tb_count)
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Datetable(file_sql, jsonSanner, json_data_table_count,
+                                                                queryMsSQL, cursor,
+                                                                jsonfile_content_dict_lst[ifile],
+                                                                import_database_name,
+                                                                'datetable', table_length, cnt_date)
+            cnt_date += 1
+            '''
+
+
+
+    def MolRefAnt_DB_POstGresSQLWritter_Datetable(self, file_hdl, jsonSanner, json_data_table_count,
+                                                  queryMsSQL, cursor,
+                                                  i_jsonfile_content_dict,
+                                                  database, table, table_length, cnt_date):
+        __func__= sys._getframe().f_code.co_name
+        rc = self.c.get_RC_SUCCESS()
+        print("table_length before get_TableCount_FromTable datetable +---> ", table_length)
+
+        rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table=table, silent=True)
+        #print("int(tb_count) after get_TableCount_FromTable datetable  +---> ", int(tb_count))
+        msg = str(i_jsonfile_content_dict['molecule_json_filename'])
+        #print(msg)
+        filename_timestamp = time.ctime(os.path.getctime(msg))
+        #msg = "        \"" + "timestamp_json_file"           + "\": \"" + filename_timestamp + "\",\n"
+        #print(msg)
+
+        rc, date_id = queryMsSQL.query_GetDate_Id(cursor=cursor, timestamp=filename_timestamp)
+        print("table_length Datetable date_id +---> ", date_id)
+        #rc, date_id = queryMsSQL.query_GetDate_Id(cursor=cursor,
+        #                                          timestamp=i_jsonfile_content_dict['timestamp_mgf_file'])
+        #print("i_jsonfile_content_dict['timestamp_mgf_file'] --->: ", i_jsonfile_content_dict['timestamp_mgf_file'])
+        #print("date_id --->: ", date_id)
+        if date_id == 0:
+            # TODO: need to fix the analytics_data_id on the second program call
+            rc, analytics_data_id = queryMsSQL.query_GetDate_analytics_data_Id(cursor=cursor,
+                                                                               analytics_data=str(cnt_date))
+            print("table_length Datetable analytics_data_id +---> ", analytics_data_id)
+            if analytics_data_id == 0:
+                insertion_point = table_length + 1
+                print("table_length Datetable insertion_point +---> ", insertion_point)
+                file_hdl.write("insert into\n")
+                file_hdl.write("    \""+self.c.getDatabase_name()+"\".\""+self.c.getDatabase_schema()+"\"."+table+"(\n")
+                file_hdl.write("    date_id,\n")                        # TODO: ---> Done
+                file_hdl.write("    date_column,\n")                    # TODO: ---> Done
+                file_hdl.write("    time_column,\n")                    # TODO: ---> Done
+                file_hdl.write("    timestamp_with_tz_column,\n")       # TODO: ---> Done
+                file_hdl.write("    analytics_data_id)\n")              # TODO: ---> Done
+                file_hdl.write("VALUES (\n")
+                file_hdl.write(str(insertion_point)+",\n")
+                date_column = str(i_jsonfile_content_dict['json_creation_timestamp']).split('_')[0]
+                file_hdl.write("'"+date_column+"',\n")
+                time_column = str(i_jsonfile_content_dict['json_creation_timestamp']).split('_')[1]
+                file_hdl.write("'"+time_column+"',\n")
+                time_stamp = str(i_jsonfile_content_dict['json_creation_timestamp'])
+                file_hdl.write("'"+time_stamp+"',\n")
+                rc, analytics_data_id = queryMsSQL.query_GetAnalytics_data_Id(cursor=cursor, molecule_json_filename=i_jsonfile_content_dict['molecule_json_filename'])
+                if analytics_data_id == 0:
+                    file_hdl.write(str(1)+"\n")
+                else:
+                    file_hdl.write(str(analytics_data_id)+"\n")
+                file_hdl.write(");\n")
+                # inserting a line for clarity
+                file_hdl.write("\n")
+                #-------------------------------------------------------------------
+                # [MSG-Creator]
+                #-------------------------------------------------------------------
+                msg = ("insert into \""+self.c.getDatabase_name()+"\".\""+self.c.getDatabase_schema()+"\"."+table+"(" +
+                       "date_id, date_column, time_column, timestamp_with_tz_column, analytics_data_id)" +
+                       " VALUES " +
+                       "("+str(insertion_point)+","+"'"+date_column+"', "+"'"+time_column+"', "+
+                       "'"+time_stamp+"', " +
+                       "'"+str(analytics_data_id)+"'"+");\n")
+                # Pushing to database
+                rc = self.MolRefAnt_DB_POstGresSQLPusher(queryMsSQL=queryMsSQL, cursor=cursor, push_request=msg)
+            # [end-if] if analytics_data_id == 0:
+        # [end-if] if date_id == 0:
+
+        return rc
+
+
+
+            # TODO: 4. insert datetable for experiment and experimenting
+            '''
+            rc, tb_count = jsonSanner.get_TableCount_FromTable(json_data=json_data_table_count, table='experiment', silent=True)
+            #table_length = int(tb_count)
+            table_length = cnt_experiment + int(tb_count)
+            print("cnt_experiment --->: ", cnt_experiment)
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Experiment(file_sql, jsonSanner, json_data_table_count,
+                                                                 queryMsSQL, cursor,
+                                                                 jsonfile_content_dict_lst[ifile],
+                                                                 'experiment', table_length)
+            cnt_experiment += 1
+            '''
+
+            rc = self.MolRefAnt_DB_POstGresSQLWritter_Experimenting(file_hdl, insertion_point,
+                                                                    queryMsSQL, cursor,
+                                                                    i_jsonfile_content_dict,
+                                                                    'experimenting', table_length)
+
+
+    def MolRefAnt_DB_POstGresSQLWritter_Experimenting(self, file_hdl, insertion_point,
+                                                      queryMsSQL, cursor,
+                                                      i_jsonfile_content_dict,
+                                                      table, table_length):
+
+
+
+
+        __func__= sys._getframe().f_code.co_name
+        rc = self.c.get_RC_SUCCESS()
+
+        '''
+        create table if not exists
+        "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Experimenting(
+        experiment_id INT,
+        analytics_data_id INT,
+        PRIMARY KEY(experiment_id, analytics_data_id),
+        FOREIGN KEY(experiment_id) REFERENCES "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Experiment(experiment_id),
+        FOREIGN KEY(analytics_data_id) REFERENCES "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Analytics_data(analytics_data_id)
+        );
+        '''
+
+
+        return rc
+
+
+            #-------------------------------------------------------------------
+            # [Analysing]
+            #-------------------------------------------------------------------
+            rc, tool_id = queryMsSQL.query_GetTool_Id(cursor=cursor, tool=i_jsonfile_content_dict['SOURCE_INSTRUMENT'])
+            msg = ("insert into \""+self.c.getDatabase_name()+"\".\""+self.c.getDatabase_schema()+"\"."+"Analysing"+"(" +
+                   "tool_id, analytics_data_id)" +
+                   " VALUES " +
+                   "("+str(tool_id)+", "+str(insertion_point)+");\n")
+
+            rc = self.MolRefAnt_DB_POstGresSQLPusher(queryMsSQL=queryMsSQL, cursor=cursor, push_request=msg)
+
+
+
+
+
+        print(" return value +--->: analytics_data_id", analytics_data_file_id)
+        print(" return value +--->: number_scans", number_scans)
+        print("i_jsonfile_content_dict['IONMODE'] +--->: ", i_jsonfile_content_dict['IONMODE'])
+        print(" ionisation_mode +---->: ", get_positivity())
+        print(" ionisation_mode_id +---->: ", ionisation_mode_id)
+
+        print()
+
+
+
+
+print('sqlCTFFileList['+str(ifile)+'] ----> ', import_database_name)
+            print('self.c.getDatabase_path() ----> ', self.c.getDatabase_path())
+            # print("tb_count --->: ", tb_count)
+
+
+
+
+        file_hdl.write("    pi_name_id,\n")                               # TODO: ---> Done
+        file_hdl.write("    data_collector_id,\n")                        # TODO: ---> Done
+
+
+        # TODO: insert the PI into the table then get its ID if not present insert into database
+        rc, pi_name_id = queryMsSQL.query_GetPlatform_user_Id(cursor=cursor,
+                                                              name=i_jsonfile_content_dict['PI'])
+        #print("pi_name_id ---->: ", pi_name_id)
+        file_hdl.write(str(pi_name_id)+",\n")
+        # TODO: insert the datacollector into the platform_user table then get its ID
+        rc, data_collector_id = queryMsSQL.query_GetPlatform_user_Id(cursor=cursor,
+                                                                     name=i_jsonfile_content_dict['DATACOLLECTOR'])
+        file_hdl.write(str(data_collector_id)+",\n")
+
+
+        print("i_jsonfile_content_dict['mol_num'] ---> ", int(i_jsonfile_content_dict['mol_num']))
+        print("int(i_jsonfile_content_value[0] ---->: ", int(i_jsonfile_content_value[0]))
+
+
+
+
+        print(len(Json_Mol_FileList[:]))
+        print(len(jsonfile_content_dict_lst[:]))
+
+
+
+
+
+            rc = self.ctfSSQLWritter(file_sql, jsonfile_content[ifile],
+                                     database, table, table_length)
+
+
+        '''
+        m.printMesgStr("Check/Create      : ", c.getMagenta(), str(c.getDataProcInterCom()).strip() )
+        if os.path.exists(str(c.getDataProcInterCom()).strip()):
+            sys.path.append(str(c.getDataProcInterCom()))
+            m.printMesgAddStr("  "+c.getDataProcInterCom()+" : ", c.getGreen(),"Exits nothing to do")
+        else:
+            m.printMesgAddStr("  "+str(c.getDataProcInterCom())+" : ", c.getRed(),"Does not Exits we will create it...")
+            os.mkdir(c.getDataProcInterCom())
+            m.printMesgAddStr("                   : ", c.getGreen(),"Done.")
+            sys.path.append(c.getDataProcInterCom())
+        '''
+
+
+
+
+        print(" tb_count --->: ", tb_count)
+        print(c.getDatabase_name())
+        print(c.getDatabase_schema())
+        print(c.getDatabase_port())
+        print(c.getDatabase_name())
+        print(c.getDatabase_schema())
+        print(c.getDatabase_port())
+        print(JsonMoleculeFileList)
+        print(" json_data_table_count --->: ", json_data_table_count)
+        print("json_table_file ---> ", json_table_file)
+
+        table_length = int(CTFDetailsKrios1Table_count)+1
+        rc, sqlCTFFileList = mssqlLauncher.ctfSQLUpdaterInsertors(JsonCTFFileList=JsonMoleculeFileList,
+                                                                  jsonfile_content=jsonfile_content_value_lst,
+                                                                  sql_dir=sql_dir,
+                                                                  table_length=table_length)
+
+        print("json_data_table_count -->: ", json_data_table_count[:])
+        print(type(json_data_table_count))
+        print(len(json_data_table_count))
+        print(json_data_table_count[0]['datetable'])
+        print("value - ", value)
+        #print(json_data_table_count['datetable'])
+        #print("key - ", key)
+        print("json_data_table_count["+str(i)+"]:"+value+" --->: "+datetableTable_count+"\n")
+
+
+value = str("["+str(self.molecules_lst[i][j]).strip().replace(' ', ', ')+"]").replace('\"','')
+
+# print("JsonMoleculeFileList[:] ---> ", JsonMoleculeFileList[:])
+                    '''
+            file = open(target_file, 'r')
+            FileList = file.readlines()
+            for i in range(len(FileList)):
+                print("FileList["+str(i)+"]: length: "+str(len(FileList[i]))+" ---> "+ FileList[i])
+                list_len += 1
+            '''
+            '''
+            lines = file.read()
+            for i in range(len(lines)):
+                FileList.append(lines[i].split('\n')[0].strip())
+                list_len += 1
+            '''
+
+
+            # Windows: Get-ChildItem  E:\Json_DataBase\ | Where-Object { $_.Name -like '*emerging*' -and $_.Name -notlike '*header*' } | Select-Object -ExpandProperty Name > E:\Json_DataBase\\target_jsonfile.txt
+            ls_cmd = ["Get-ChildItem  ",
+                      self.c.getPool_targetdir(),
+                      " | Where-Object { $_.Name -like \'*" + self.c.getDatabase_name() + "*\' -and $_.Name -notlike \'*header*\' } | Select-Object -ExpandProperty Name",
+                     ">", fileout]
+            CMD = ' '.join(ls_cmd)
+            self.m.printMesgStr("CMD: ", self.c.get_B_Magenta(), CMD)
+            #os.system('%s'%CMD)
+            #powershell_cmd = "Get-ChildItem | Select-Object -ExpandProperty Name"
+            # Invoke PowerShell command
+            result = subprocess.run(["powershell", "", CMD] ) #, capture_output=True, text=True)
+            #print(result.stdout)
+            print("self.c.getPool_targetdir() --->: ", self.c.getPool_targetdir())
+            all_files_lst = [f for f in os.listdir("E://Json_DataBase//") if os.path.isfile(f)]
+            print(" --->: ", all_files_lst[:])
+
+
+            msg =  '\'C:\\Users\Frederic\AppData\Local\Programs\PyCharm Professional\plugins\python\helpers\pycharm\django_manage.py\' inspectdb '+ \
+                   table_list[i] + ' C:/Users/Frederic/OneDrive/UVPD-Perpignan/SourceCodes/PycharmProjects/MolRefAnt_DB_Django' # + \
+            #' >> '+ \
+            #self.c.getJSon_TableCounts_Dir()+os.path.sep+"alldjango_models.py"
+            #print("msg --->: ", msg)
+            #os.system('python %s'%msg)
+
+
+
+
+
+
+
+        self.cursor.execute("select * from \"MolRefAnt_DB_PostGreSQL\".\"MolRefAnt_DB\".analytics_data;")
+        data_analytics_data = self.cursor.fetchone()
+
+        self.cursor.execute("select * from \"MolRefAnt_DB_PostGreSQL\".\"MolRefAnt_DB\".datetable;")
+        data_datetable = self.cursor.fetchone()
+
+        print("data_analytics_data ---> ", data_analytics_data)
+        print("data_datetable      ---> ", data_datetable)
+
+        #conn.close()
+        cnxn.close()
+
+        #exit(0)
+
+
+
+
+
 
         for i in range(len(self.molecules_lst[:])):
             #self.m.printMesgAddStr("[molecules_lst]: mol("+str(i)+"), length("+str(len(self.molecules_lst[i]))+") --->: ",

@@ -91,7 +91,7 @@ class ProgressBar:
         self.pBarFiller      = ">"
         self.pBarUpdater     = ">"
         # data */
-        self.printTimerEvent = True #initialized but should be passed & set
+        self.printTimerEvent = True  #initialized but should be passed & set
         self.timer           = None
         self.prevTime        = 0.0
         self.pBarLength      = 50

@@ -6,6 +6,7 @@
       \date 13th of February 2020
 
       Leiden University February 2020
+      Modified Obs/University of Perpignan 2024
 
 Name:
 ---
@@ -74,13 +75,24 @@ class DataManage_common:
     #***************************************************************************
     #\param self     Self object
     def __init__(self):
+        self.undr_scr = "_"
+        self.dot = "."
         self.use_gpu = False
         self.gpu_list = "0"
         self.gpu_list_class2d = "0"
         self.gpu_list_init3d = "0"
         self.gpu_list_class3d = "0"
         self.gpu_list_refine3d = "0"
-        self.set_gpu = 0
+        # Debugger switches
+        self.debug           = 0   #True:1 False:0
+        self.debug_cpu       = 0   #false
+        self.debug_high      = 0   #true
+        self.debug_write     = 0   #false
+        self.debug_write_C   = 0   #false
+        self.set_gpu         = 0
+        # File extension
+        self.file_extension  = ".json"
+        # GUI switch
         self.showGUI = True
         self.bench_cpu = False
         self.app_root = "./"
@@ -105,6 +117,8 @@ class DataManage_common:
         self.motioncorr_dir = "/opt/Devel_tools/MotionCor2_v1.3.1/"
         self.relionDir = "/opt/Devel_tools/Relion3.1/relion-ver3.1/build/bin"
         self.json_scan_dir = "/scratch/DataProcInterCom"
+        self.sql_dir = "SQLFiles_sql"
+        self.sql_fullPath_dir = "./SQLFiles_sql"
         self.table_cnts_dir = os.path.join(self.json_scan_dir,'TableCounts')
         #Markers for command lines execution
         self.doBenchMarking_Marker = ""
@@ -139,6 +153,7 @@ class DataManage_common:
         self.gain_rotation = 0
         self.gain_flip = 0
         self.pool_targetdir = "_Pool"
+        self.pool_componentdir = "_Pool"
         self.gain_type = "x0.m0"
         #Rest API variable
         self.api_key = "123456789"    #Some Api Key
@@ -218,20 +233,34 @@ class DataManage_common:
         self.csvfile = "netUse.csv"
         self.rawfile = "mzmineRaw.raw"
         self.mgffile = "mzmineRaw.mgf"
-
+        self.DataProcInterCom = os.path.join('E:','DataProcInterCom')
         self.rawfile_path = "."+os.sep
         self.rawfile_full_path_no_ext = "."+os.sep
 
+        self.pubchem_url = "https://pubchem.ncbi.nlm.nih.gov/compound/"
+        self.database_origin = "FragHub"  # [FragHub, LC-MS, MONA]
+        self.database_extension = "mgf"
         self.import_db = "full_path/some_db.txt"
         self.export_db = "full_path/some_db.txt"
+        self.import_external_db = "full_path/some_db.txt"
+        self.export_external_db = "full_path/some_db.txt"
+        self.import_db_set = "single"   # [single, multi]
         self.database_path = "./"
         self.database_name = "some_db"
+        self.database_schema = "some_schema"
         self.database_full_path_no_ext = "./some_db"
         self.database_file = "some_db.txt"
+        self.database_port = 1234
+        self.database_server = "server name"
+        self.cursor = None
+        self.queryMsSQL = None
 
         self.file_basename = "file_basename"
-
+        self.jsontargetdir = "./"
         self.quantum_computing = "no"
+
+        self.machine_learning = "no"
+
         self.scan_number = 1
         self.Ret_time = 1.23
         self.pepmass = 123.456
@@ -239,7 +268,11 @@ class DataManage_common:
         self.MSLevel = 1
         self.begin_ions = "BEGIN IONS"
         self.end_ions = "END IONS"
-    #TODO: If statement will be removed after checking
+
+        # Computation and processing [serial, parrallell, multiprocessing]
+        self.multiprocessing_type = "serial"   # [serial, parrallle, multithreaded]
+
+        #TODO: If statement will be removed after checking
         if (system == 'Linux'):
             sys.path.append(os.path.join(os.getcwd(), 'utils'))
             #sys.path.append('./utils')
@@ -248,7 +281,7 @@ class DataManage_common:
             #sys.path.append('./utils')
         elif (system == 'Windows'):
             sys.path.append(os.path.join(os.getcwd(), 'utils'))
-            Windows_warningMessage()
+            #Windows_warningMessage()
         self.initialize()
     #---------------------------------------------------------------------------
     # class methods
@@ -294,14 +327,19 @@ class DataManage_common:
         self.sr_brck            = "]"
         self.g_than             = ">"
         self.l_than             = "<"
-        self.undscr             = "_"    # underscore
-        self.sptr               = "/";   # set the name for the separator.
-        self.b_sptr             = "\\";  # set the name for the separator.
-        self.all                = "*";   # unix commands for all files eg: file*
-        self.eq                 = "=";   # equal sign for file writting
+        self.undscr             = "_"   # underscore
+        self.sptr               = "/"   # set the name for the separator.
+        self.b_sptr             = "\\"  # set the name for the separator.
+        self.all                = "*"   # unix commands for all files eg: file*
+        self.eq                 = "="   # equal sign for file writting
         self.mrc_ext            = ".mrc"
         self.spi_ext            = ".spi"
         self.map_ext            = ".map"
+        self.mgf_ext            = ".mgf"
+        self.txt_ext            = ".txt"
+        self.json_ext           = ".json"
+        self.csv_ext            = ".csv"
+        self.xls_ext            = ".xls"
         self.local_path         = os.getcwd()
         #Scope details default values
         self.collection_speed   = 100
@@ -376,7 +414,7 @@ class DataManage_common:
             '''
             self.red           = ""
             self.green         = ""
-            self.yellow        = "\033[0;93m"
+            self.yellow        = ""
             self.blue          = ""
             self.magenta       = ""
             self.cyan          = ""
@@ -409,20 +447,13 @@ class DataManage_common:
     #---------------------------------------------------------------------------
     # [System]: sysver, platform, system, release, node, processor, cpu_count
     #---------------------------------------------------------------------------
-    def get_sysver(self):
-        return self.sysver
-    def get_platform(self):
-        return self.platform
-    def get_system(self):
-        return self.system
-    def get_release(self):
-        return self.release
-    def get_node(self):
-        return self.node
-    def get_processor(self):
-        return self.processor
-    def get_cpu_count(self):
-        return self.cpu_count
+    def get_sysver(self): return self.sysver
+    def get_platform(self): return self.platform
+    def get_system(self):  return self.system
+    def get_release(self): return self.release
+    def get_node(self): return self.node
+    def get_processor(self): return self.processor
+    def get_cpu_count(self): return self.cpu_count
     #---------------------------------------------------------------------------
     # [Setters]: methods
     #---------------------------------------------------------------------------
@@ -494,10 +525,10 @@ class DataManage_common:
     #--file_pst_handler=extract_data---> combo box
     def setFile_pst_handler(self, file_pst_handler):
         self.file_pst_handler = file_pst_handler
-    #--motioncorr_dir=MOTIONCORR_DIR     Path to Motion Corr executable
+    #--motioncorr_dir=MOTIONCORR_DIR
     def setMotionCorr_dir(self, motioncorr_dir):
         self.motioncorr_dir = motioncorr_dir
-    #--ctffind_dir=CTFFIND_DIR           Path to CTFFind executable
+    #--ctffind_dir=CTFFIND_DIR
     def setCTFFind_dir(self, ctffind_dir):
         self.ctffind_dir = ctffind_dir
     #---------------------------------------------------------------------------
@@ -796,6 +827,12 @@ class DataManage_common:
     #Marker variable self.refine3d_marker = refine3d_marker
     def setFullPipeLine_Marker(self, fullPipeLine):
         self.fullPipeLine_marker = fullPipeLine
+    def setDataProcInterCom(self, DataProcInterCom):
+        self.DataProcInterCom = DataProcInterCom
+    def setPool_componentdir(self, pool_componentdir):
+        self.pool_componentdir = pool_componentdir
+    def setJsontargetdir(self, jsontargetdir):
+        self.jsontargetdir = jsontargetdir
     #---------------------------------------------------------------------------
     # [Scanner] Setters for Scanning methods and classes
     #--->current_AllTableCount_json_file
@@ -852,6 +889,12 @@ class DataManage_common:
     # --export_db=EXPORT_DB
     def setExport_db(self, export_db):
         self.export_db = export_db
+    # --import_external_db=IMPORT_EXTERNAL_DB
+    def setImport_External_db(self, import_external_db):
+        self.import_external_db = import_external_db
+    # --export_external_db=export_EXTERNAL_DB
+    def setExport_External_db(self, export_external_db):
+        self.export_external_db = export_external_db
     def setDatabase_path(self, database_path):
         self.database_path = database_path
     def setDatabase_name(self, database_name):
@@ -862,17 +905,127 @@ class DataManage_common:
         self.database_file = database_file
     def setFile_basename(self, file_basename):
         self.file_basename = file_basename
+    def setDatabase_schema(self, database_schema):
+        self.database_schema = database_schema
+    def setDatabase_port(self, database_port):
+        self.database_port = database_port
+    def setDatabase_server(self, database_server):
+        self.database_server = database_server
+    # Debugger setters
+    def setDebug(self, debug):
+        self.debug = debug
+    def setDebug_cpu(self, debug_cpu):
+        self.debug_cpu = debug_cpu
+    def setDebug_high(self, debug_high):
+        self.debug_high = debug_high
+    def setDebug_write(self, debug_write):
+        self.debug_write = debug_write
+    def setDebug_write_C(self, debug_write_C):
+        self.debug_write_C = debug_write_C
+    def setSql_dir(self, sql_dir):
+        self.sql_dir = sql_dir
+    def setSql_fullPath_dir(self, sql_fullPath_dir):
+        self.sql_fullPath_dir = sql_fullPath_dir
+    def setQuery_cursor(self, cursor):
+        self.cursor = cursor
+    def setQuery_object(self, queryMsSQL):
+        self.queryMsSQL = queryMsSQL
+    def setDatabase_file(self, database_file):
+        self.database_file = database_file
+    def setDatabase_file(self, database_file):
+        self.database_file = database_file
+    # [serial, parrallle, multithreaded]
+    def setMultiprocessing_type(self, multiprocessing_type):
+        self.multiprocessing_type = multiprocessing_type
+
+    # --import_db_set=IMPORT_DB_SET
+    def setImport_db_set(self, import_db_set):
+        self.import_db_set = import_db_set
+
+    def setPubchem_url(self, pubchem_url):
+        self.pubchem_url = pubchem_url
+
+    #--database_origin=DATABASE_ORIGIN
+    def setDatabase_origin(self, database_origin):
+        self.database_origin = database_origin
+
+    #self.database_extension
+    def setDatabase_extension(self, database_extension):
+        self.database_extension = database_extension
+
+    # --machine_learning=MACHINE_LEARNING
+    def setMachineLearning(self, machine_learning):
+        self.machine_learning = machine_learning
+
     #---------------------------------------------------------------------------
     # [Getters]: methods
     #---------------------------------------------------------------------------
-    def getFile_basename(self):
-        return self.file_basename
-    # --import_db=IMPORT_DB
+
+    # --machine_learning=MACHINE_LEARNING
+    def getMachineLearning(self):
+        return self.machine_learning
+
+    #self.database_extension
+    def getDatabase_extension(self):
+        return self.database_extension
+
+    #--database_origin=DATABASE_ORIGIN
+    def getDatabase_origin(self):
+        return self.database_origin
+
+    def getPubchem_url(self):
+        return self.pubchem_url
+    # --import_db_set=IMPORT_DB_SET
+    def getImport_db_set(self):
+        return self.import_db_set
+
+    def getMultiprocessing_type(self):
+        return self.multiprocessing_type
     def getImport_db(self):
         return self.import_db
     # --export_db=EXPORT_DB
     def getExport_db(self):
         return self.export_db
+    # --import_external_db=IMPORT_EXTERNAL_DB
+    def getImport_External_db(self):
+        return self.import_external_db
+    # --export_external_db=export_EXTERNAL_DB
+    def getExport_External_db(self):
+        return self.export_external_db
+    def getJsontargetdir(self, jsontargetdir):
+            return self.jsontargetdir
+    def getPool_componentdir(self):
+        return self.pool_componentdir
+    def getDataProcInterCom(self):
+        return self.DataProcInterCom
+    def getQuery_object(self):
+        return self.queryMsSQL
+    def getQuery_cursor(self):
+        return self.cursor
+    def getSql_fullPath_dir(self):
+        return self.sql_fullPath_dir
+    def getSql_dir(self):
+        return self.sql_dir
+    # Debugger setters
+    def getDebug(self):
+        return self.debug
+    def getDebug_cpu(self):
+        return self.debug_cpu
+    def getDebug_high(self):
+        return self.debug_high
+    def getDebug_write(self):
+        return self.debug_write
+    def getDebug_write_C(self):
+        return self.debug_write_C
+    def getDatabase_server(self):
+        return self.database_server
+    def getDatabase_port(self):
+        return self.database_port
+    def getDatabase_schema(self):
+        return self.database_schema
+    def getFile_basename(self):
+        return self.file_basename
+    # --import_db=IMPORT_DB
     def getDatabase_path(self):
         return self.database_path
     def getDatabase_name(self):
@@ -883,10 +1036,6 @@ class DataManage_common:
         return self.rawfile_path
     def getDatabase_file(self):
         return self.database_file
-    def setDatabase_file(self, database_file):
-        self.database_file = database_file
-    def setDatabase_file(self, database_file):
-        self.database_file = database_file
     def getRawfile_full_path_no_ext(self):
         return self.rawfile_full_path_no_ext
     def getSourcedir(self):
@@ -1370,7 +1519,6 @@ class DataManage_common:
     #Marker variable self.refine3d_marker = refine3d_marker
     def getFullPipeLine_Marker(self):
         return self.fullPipeLine_marker
-
 
     #---------------------------------------------------------------------------
     # [Scanner] Setters for Scanning methods and classes

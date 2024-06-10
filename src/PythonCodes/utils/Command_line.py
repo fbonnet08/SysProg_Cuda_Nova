@@ -77,14 +77,73 @@ class Command_line:
         self.eq                 = "=";   # equal sign for file writting
         self.mrc_ext            = ".mrc"
         self.spi_ext            = ".spi"
-        self.map_ext            = ".map"
+        self.json_ext            = ".json"
+        self.csv_ext            = ".csv"
+        self.asc_ext            = ".asc"
         self.local_path         = os.getcwd()
     #---------------------------------------------------------------------------
     # [Creators]: methods
     #---------------------------------------------------------------------------
-    #------------------------------------------
+    #---------------------------------------------------------------------------
     #General command for args
-    #------------------------------------------
+    #---------------------------------------------------------------------------
+    # --machine_learning=MACHINE_LEARNING
+    def createMachineLearning(self):
+        __func__ = sys._getframe().f_code.co_name
+        #--machine_learning=MACHINE_LEARNING
+        if self.args['--machine_learning'] == "yes":
+            MACHINE_LEARNING = "yes"
+        elif self.args['--machine_learning'] == "no":
+            MACHINE_LEARNING = "no"
+        else:
+            MACHINE_LEARNING = self.c.getMachineLearning()
+        self.c.setMachineLearning(MACHINE_LEARNING)
+
+    # --database_origin=DATABASE_ORIGIN
+    def createDatabase_origin_db(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            DATABASE_ORIGIN = self.args['--database_origin']
+        except:
+            DATABASE_ORIGIN = self.c.getDatabase_origin()
+        self.c.setDatabase_origin(DATABASE_ORIGIN)
+
+    # --import_db_set=IMPORT_DB_SET
+    def createImport_db_set(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            IMPORT_DB_SET = self.args['--import_db_set']
+        except:
+            IMPORT_DB_SET = self.c.getImport_db_set()
+        self.c.setImport_db_set(IMPORT_DB_SET)
+
+    # --multiprocessing_type=MULTIPROCESSING_TYPE
+    def createMultiprocessing_type(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            MULTIPROCESSING_TYPE = self.args['--multiprocessing_type']
+        except:
+            MULTIPROCESSING_TYPE = self.c.getMultiprocessing_type()
+        self.c.setMultiprocessing_type(MULTIPROCESSING_TYPE)
+
+    # --import_external_db=IMPORT_EXTERNAL_DB
+    def createImport_External_db(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            IMPORT_EXTERNAL_DB = self.args['--import_external_db']
+        except:
+            IMPORT_EXTERNAL_DB = self.c.getImport_External_db()
+        self.c.setImport_External_db(IMPORT_EXTERNAL_DB)
+
+    # --export_external_db=export_EXTERNAL_DB
+    def createExport_External_db(self):
+        __func__ = sys._getframe().f_code.co_name
+        try:
+            EXPORT_EXTERNAL_DB = self.args['--export_external_db']
+        except:
+            EXPORT_EXTERNAL_DB = self.c.getExport_External_db()
+        self.c.setExport_External_db(EXPORT_EXTERNAL_DB)
+
     # --import_db=IMPORT_DB
     def createImport_db(self):
         __func__ = sys._getframe().f_code.co_name

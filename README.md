@@ -15,6 +15,11 @@ Requirements
 * Windows: The built in Visual Studio Tool Chain (clang)
 * Make, CMake, and CUDA-toolkit (12.x preferably)
 * Windows: Visual Studio 2019 community version
+* Python:
+  - psycopg2
+  - psycopg[binaries]
+  - pyodbc
+  - selenium
 
 How to use it
 -------------

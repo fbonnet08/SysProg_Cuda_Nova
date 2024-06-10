@@ -45,12 +45,13 @@ from subprocess import PIPE, run
 sys.path.append(os.path.join(os.getcwd(), '.'))
 sys.path.append(os.path.join(os.getcwd(), '..'))
 # application imports
-from DataManage_common import whichPlatform
+#from DataManage_common import whichPlatform
+import src.PythonCodes.DataManage_common
 #platform, release  = whichPlatform()
-sysver, platform, system, release, node, processor, cpu_count = whichPlatform()
+sysver, platform, system, release, node, processor, cpu_count = src.PythonCodes.DataManage_common.whichPlatform()
 #from progressBar import *
-import utils.StopWatch
-import utils.progressBar
+import src.PythonCodes.utils.StopWatch
+import src.PythonCodes.utils.progressBar
 # ------------------------------------------------------------------------------
 # Class to read star file from Relion
 # file_type can be 'mrc' or 'ccp4' or 'imod'.
@@ -73,27 +74,24 @@ class JSonScanner:
         # first mapping the input to the object self
         self.c = c
         self.m = m
+        self.m.printMesgStr("Instantiating the class       :", self.c.getGreen(), "JSonScanner")
         self.app_root = self.c.getApp_root()        # app_root
         self.json_scan_dir = self.c.getJSon_Scan_Dir() #Json dir to be scanned
         self.table_cnts_dir = self.c.getJSon_TableCounts_Dir()
         # Instantiating logfile mechanism
         logfile = self.c.getLogfileName()
 
-        m.printMesg("Instantiating the JSonScanner class...")
         #-----------------------------------------------------------------------
         # Starting the timers for the constructor
         #-----------------------------------------------------------------------
-        stopwatch = utils.StopWatch.createTimer()
+        stopwatch = src.PythonCodes.utils.StopWatch.createTimer()
         if c.getBench_cpu():
             # creating the timers and starting the stop watch...
-            utils.StopWatch.StartTimer(stopwatch)
+            src.PythonCodes.utils.StopWatch.StartTimer(stopwatch)
 
-        self.m.printMesgAddStr(" app_root          : ",
-                               self.c.getYellow(), self.app_root)
-        self.m.printMesgAddStr(" Json scanning dir : ",
-                               self.c.getGreen(), self.json_scan_dir)
-        self.m.printMesgAddStr(" Table counts dir  : ",
-                               self.c.getMagenta(), self.table_cnts_dir)
+        self.m.printMesgAddStr(" app_root                  --->: ", self.c.getYellow(), self.app_root)
+        self.m.printMesgAddStr(" Json scanning dir         --->: ", self.c.getGreen(), self.json_scan_dir)
+        self.m.printMesgAddStr(" Table counts dir          --->: ", self.c.getMagenta(), self.table_cnts_dir)
         self.system = system
         #-----------------------------------------------------------------------
         # Setting up the file environment
@@ -110,10 +108,8 @@ class JSonScanner:
 
         self.ScanTableFileList_txt = self.app_root+os.path.sep+"Scanner_Table_fileList.txt"
         
-        self.m.printMesgAddStr(" JSon TableCount   : ",
-                               self.c.getMagenta(), self.json_table_file)
-        self.m.printMesgAddStr(" System            : ",
-                               self.c.getCyan(), system)
+        self.m.printMesgAddStr(" JSon TableCount           --->: ", self.c.getMagenta(), self.json_table_file)
+        self.m.printMesgAddStr(" System                    --->: ", self.c.getCyan(), system)
         #-----------------------------------------------------------------------
         # Setting the list for the records scanned
         #-----------------------------------------------------------------------
@@ -127,7 +123,7 @@ class JSonScanner:
         # Reporting time taken to instantiate and strip innitial star file
         #-----------------------------------------------------------------------
         if c.getBench_cpu():
-            utils.StopWatch.StopTimer_secs(stopwatch)
+            src.PythonCodesutils.StopWatch.StopTimer_secs(stopwatch)
             info = self.c.GetFrameInfo()
             self.m.printBenchTime_cpu("Read data_path file", self.c.getBlue(), stopwatch, info, __func__)
         # ----------------------------------------------------------------------
@@ -426,12 +422,12 @@ class JSonScanner:
                   + self.c.getGreen()+ " <-Value-> "   \
                   + self.c.getCyan() + str(idata[key])
             value = idata[key]
-            self.m.printMesgAddStr(" Last count        : ",
-                                   self.c.getGreen(), msg)
+            self.m.printMesgAddStr(" Last count                --->: ", self.c.getGreen(), msg)
+
             cnt += 1
         return rc, value
 
-    def get_TableCount_FromTable(self, json_data, table):
+    def get_TableCount_FromTable(self, json_data, table, silent):
         rc = self.c.get_RC_SUCCESS()
         __func__ = sys._getframe().f_code.co_name
         cnt = 0
@@ -442,9 +438,10 @@ class JSonScanner:
                   + self.c.getGreen() +" <-Count-> "    \
                   + self.c.getCyan() + str(idata[table])
             count = idata[table]
-            self.m.printMesgAddStr(" Last count        : ",
-                                   self.c.getGreen(), msg)
+            if not silent:
+                self.m.printMesgAddStr(" Last count                --->: ", self.c.getGreen(), msg)
             cnt += 1
+        # [end-loop]
         return rc, count
     #---------------------------------------------------------------------------
     # [Setters]

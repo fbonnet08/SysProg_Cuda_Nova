@@ -37,10 +37,7 @@ import src.PythonCodes.src.Usage_Network
 import src.PythonCodes.utils.messageHandler
 import src.PythonCodes.utils.Command_line
 import src.PythonCodes.utils.MathematicalModel_Analyser
-from docopt import docopt
-
-import cirq
-
+import src.PythonCodes.docopt
 #C:\Program Files\Python312\python.exe
 ext_asc = ".asc"
 ext_csv = ".csv"
@@ -56,7 +53,7 @@ if __name__ == "__main__":
     logfile = c.getLogfileName()  #getting the name of the global log file
     m = src.PythonCodes.utils.messageHandler.messageHandler(logfile = logfile)
     # setting up the argument list and parsing it
-    args = docopt(__doc__, version=version)
+    args = src.PythonCodes.docopt(__doc__, version=version)
     #---------------------------------------------------------------------------
     # system details
     #---------------------------------------------------------------------------

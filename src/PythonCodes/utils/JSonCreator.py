@@ -39,6 +39,7 @@ import os
 import json
 import numpy
 import datetime
+import time
 #from subprocess import PIPE, run
 # appending the utils path
 sys.path.append(os.path.join(os.getcwd(), '.'))
@@ -77,20 +78,28 @@ class JSonCreator:
         # first mapping the input to the object self
         self.c = c
         self.m = m
-        self.app_root = self.c.getApp_root()        # app_root
-        self.data_path = self.c.getData_path()      # data_path
-        self.projectName = self.c.getProjectName()  # projectName
-        self.targetdir = self.c.getTargetdir()      # targetdir
-        self.software = self.c.getSoftware()        # software
+        self.m.printMesgStr("Instantiating the class       :", self.c.getGreen(), "JSonCreator")
+        self.app_root = self.c.getApp_root()                    # app_root
+        self.data_path = self.c.getData_path()                  # data_path
+        self.projectName = self.c.getProjectName()              # projectName
+        self.targetdir = self.c.getTargetdir()                  # targetdir
+        self.software = self.c.getSoftware()                    # software
+        self.pool_componentdir = self.c.getPool_componentdir()  # "_Pool or not"
         # Some fix variables
+        self.ext_asc = ".asc"
+        self.ext_csv = ".csv"
+        self.ext_mgf = ".mgf"
         self.ext_json = ".json"
+        self.undr_scr = "_"
+        self.dot = "."
 
-    # Instantiating logfile mechanism
+        # Instantiating logfile mechanism
         logfile = self.c.getLogfileName()
-        self.pool_targetdir = os.path.join(self.targetdir, self.projectName+"_Pool")
-        self.c.setPool_Targetdir(self.pool_targetdir)
+        self.pool_targetdir = os.path.join(self.targetdir,
+                                           self.projectName,
+                                           self.pool_componentdir)
 
-        m.printMesg("Instantiating the JSonCreator class...")
+        self.c.setPool_Targetdir(self.pool_targetdir)
         # ----------------------------------------------------------------------
         # Starting the timers for the constructor
         # ----------------------------------------------------------------------
@@ -98,21 +107,14 @@ class JSonCreator:
         if c.getBench_cpu():
             # creating the timers and starting the stop watch...
             src.PythonCodes.utils.StopWatch.StartTimer(stopwatch)
-
-        self.m.printMesgAddStr(" app_root          : ",
-                               self.c.getYellow(), self.app_root)
-        self.m.printMesgAddStr(" data_path         : ",
-                               self.c.getGreen(), str(self.data_path))
-        self.m.printMesgAddStr(" projectName       : ",
-                               self.c.getGreen(), str(self.projectName))
-        self.m.printMesgAddStr(" targetdir         : ",
-                               self.c.getMagenta(), str(self.targetdir))
-        self.m.printMesgAddStr(" Software          : ",
-                               self.c.getRed(), str(self.software))
-        self.m.printMesgAddStr(" Pool path         : ",
-                               self.c.getBlue(), str(self.pool_targetdir))
-        self.m.printMesgAddStr(" System            : ",
-                               self.c.getCyan(), system)
+        # TODO : need to fix the preamble of the class
+        self.m.printMesgAddStr(" app_root                  --->: ", self.c.getYellow(), self.app_root)
+        #self.m.printMesgAddStr(" data_path                 --->: ", self.c.getCyan(), str(self.data_path))
+        #self.m.printMesgAddStr(" projectName               --->: ", self.c.getMagenta(), str(self.projectName))
+        self.m.printMesgAddStr(" targetdir                 --->: ", self.c.getCyan(), str(self.targetdir))
+        #self.m.printMesgAddStr(" Software                  --->: ", self.c.getRed(), str(self.software))
+        #self.m.printMesgAddStr(" Pool path                 --->: ", self.c.getBlue(), str(self.pool_targetdir))
+        self.m.printMesgAddStr(" System                    --->: ", self.c.getCyan(), system)
         self.system = system
         # ----------------------------------------------------------------------
         # Setting up the file environment
@@ -129,7 +131,6 @@ class JSonCreator:
             self.json_write_path = os.path.join("g:","frederic")
 
         self.json_table_file = "current_AllTableCount_rec"+self.json_ext
-
         # ----------------------------------------------------------------------
         # Reporting time taken to instantiate and strip innitial star file
         # ----------------------------------------------------------------------
@@ -150,6 +151,72 @@ class JSonCreator:
     #---------------------------------------------------------------------------
     # [Creator]
     #---------------------------------------------------------------------------
+    def create_ith_molecule_JSon_file(self, ith_molecules_dict, mol_num, filename_json, outfile):
+        rc = self.c.get_RC_SUCCESS()
+        #----------------------------------------------------------------------------
+        # Constructing the filename
+        #----------------------------------------------------------------------------
+        current_time = datetime.datetime.now()
+        format_time = current_time.strftime('%Y-%m-%d_%H:%M:%S')
+        #----------------------------------------------------------------------------
+        # [opening-mol-jsonfile] Filling the JSon file with content
+        #----------------------------------------------------------------------------
+        outfile.write("[\n")
+        #----------------------------------------------------------------------------
+        # [header-mol-jsonfile] Filling the JSon file with content
+        #----------------------------------------------------------------------------
+        #json.dump(ith_molecules_dict, outfile, indent=8)
+        start_key = "BEGIN IONS"
+        end_key = "END IONS"
+        MZ_REL_key = "mz rel: "
+        INCHI_key = "INCHI"
+        outfile.write("    {\n")
+        # Now we can add additional information in the json file
+        msg = "        \"" + "mol_num" + "\": \"" + str(mol_num) + "\",\n"
+        outfile.write(msg)
+        msg = "        \"" + "molecule_json_filename" + "\": \"" + str(filename_json).replace('\\','/') + "\",\n"
+        outfile.write(msg)
+        msg = "        \"" + "database_name" + "\": \"" + self.c.getDatabase_name() + "\",\n"
+        outfile.write(msg)
+        filename_timestamp = time.ctime(
+            os.path.getctime(
+                str(filename_json)
+            )
+        )
+        msg = "        \"" + "json_creation_timestamp"           + "\": \"" + format_time + "\",\n"
+        outfile.write(msg)
+        msg = "        \"" + "timestamp_mgf_file"           + "\": \"" + filename_timestamp + "\",\n"
+        outfile.write(msg)
+        # TODO: append entries here as needed and if needed.
+        #----------------------------------------------------------------------------
+        # [main-mol-jsonfile] Filling the JSon file with content
+        #----------------------------------------------------------------------------
+        #print("ith_molecules_dict ---->: ", ith_molecules_dict)
+        cnt = 0
+        for key, value in ith_molecules_dict.items():
+            #self.m.printMesgAddStr("[keys]: ith_molecules_dict["+str(cnt)+"]  --->: ",
+            #                       self.c.getCyan(), key)
+            if key == end_key:
+                msg = "        \"" + key + "\": \"" + value + "\"\n"
+            elif MZ_REL_key in key:
+                msg = "        \"" + key + "\": [" + str(value).replace(' ', ', ') + "],\n"
+            elif INCHI_key in key:
+                msg = "        \"" + key + "\": \"" + str(value).replace("\"","") + "\",\n"
+            else:
+                msg = "        \"" + key + "\": \"" + value + "\",\n"
+            outfile.write(msg)
+            cnt += 1
+        # [end-loop]
+        outfile.write("    }\n")
+        #----------------------------------------------------------------------------
+        # [closing-mol-jsonfile] Filling the JSon file with content
+        #----------------------------------------------------------------------------
+        outfile.write("]\n")
+        #----------------------------------------------------------------------------
+        # [end] of Filling the JSon file with content
+        #----------------------------------------------------------------------------
+        return rc
+
     def create_MZ_Relative_JSon_file(self, scan_number, spectrum, mz_I_Rel, mz_I_Rel_sorted):
         # TODO: need to put setters and getters for the raw file in the c object
         rc = self.c.get_RC_SUCCESS()
@@ -169,20 +236,33 @@ class JSonCreator:
         #----------------------------------------------------------------------------
         current_time = datetime.datetime.now()
         format_time = current_time.strftime('%Y-%m-%d_%H:%M:%S')
+        filename_prefix = "spectra"
         file_format_time = 1 #current_time.strftime('%Y%m%d_%H%M%S')
-        msg = self.c.getApp_root()+" "+self.c.getScan_number()+" "+ self.c.getRet_time()+" " + \
+        msg = self.c.getApp_root()+" "+filename_prefix+" "+self.c.getScan_number()+" "+ self.c.getRet_time()+" " + \
               self.c.getRAW_file() + " " + str(format_time) + " " + \
               str(self.c.getScan_number().zfill(len(str(self.zerolead)))) + " " + self.ext_json
         #print(" msg      -->: ", msg)
         self.m.printMesgAddStr("[file_constructors]    msg --->: ", self.c.getMagenta(), msg)
 
-        filename = self.c.getRawfile_path() + os.sep +str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(self.zerolead)))) +"_" + \
+        filename = self.c.getRawfile_path() + os.path.sep + filename_prefix + self.undr_scr + \
+                   str(file_format_time)+"_"+str(self.c.getScan_number().zfill(len(str(self.zerolead)))) +"_" + \
                    '{:03.2f}'.format(float(self.c.getRet_time()))+"_"+ \
                    os.path.basename(os.path.normpath(self.c.getRawfile_full_path_no_ext()))+self.ext_json
-        #print(" filename -->: ", filename)
+
+        filename_timestamp = time.ctime(
+            os.path.getctime(
+                str(
+                    self.c.getRawfile_path() + os.path.sep + \
+                    os.path.basename(os.path.normpath(self.c.getRawfile_full_path_no_ext())) + \
+                    self.ext_mgf
+                )
+            )
+        )
+        #filename_timestamp = str(filename_timestamp).format('%Y-%m-%d_%H:%M:%S')
+        #print("filename_timestamp --->: ", filename_timestamp)
         self.m.printMesgAddStr("[file_json]:   scan number --->: ", self.c.getMagenta(), filename)
         #----------------------------------------------------------------------------
-        # Writting to file wi the try catch method
+        # Writing to file wi the try catch method
         #----------------------------------------------------------------------------
         try:
             json_file = open(filename, 'w')
@@ -201,13 +281,21 @@ class JSonCreator:
             json_file.write(msg)
             msg = "        \"" + "RT"                           + "\": \"" + self.c.getRet_time() + "\",\n"
             json_file.write(msg)
+            msg = "        \"" + "mgf_file"                     + "\": \"" + str(os.path.basename(os.path.normpath(self.c.getRawfile_full_path_no_ext()))+self.ext_mgf) + "\",\n"
+            json_file.write(msg)
+            msg = "        \"" + "json_creation_timestamp"           + "\": \"" + format_time + "\",\n"
+            json_file.write(msg)
+            msg = "        \"" + "timestamp_mgf_file"           + "\": \"" + filename_timestamp + "\",\n"
+            json_file.write(msg)
+            msg = "        \"" + "spectra_json_filename"        + "\": \"" + str(filename).replace('\\','/') + "\",\n"
+            json_file.write(msg)
             # Writing the list of colum into the
             cnt = 0
-            for i in range(mz_I_Rel_sorted_len - 1):
-                cnt += 1
+            for i in range(mz_I_Rel_sorted_len):
                 msg = "        \"" + \
-                      str(cnt) + "\": [" + str(mz_I_Rel_sorted[i][0]) + ", " + \
+                      'mz rel: '+str(cnt).zfill(4) + "\": [" + str(mz_I_Rel_sorted[i][0]) + ", " + \
                       str(mz_I_Rel_sorted[i][2]) + "],\n"
+                cnt += 1
                 json_file.write(msg)
             # [end-loop]
             msg = "        \"" + spectrum[spectrum_len-1] + "\": \"" + spectrum[spectrum_len-1] + "\"\n"
