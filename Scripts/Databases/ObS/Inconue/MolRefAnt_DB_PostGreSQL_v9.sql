@@ -438,58 +438,6 @@ insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".IonModeChem(ionmodechem_id,
 insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".IonModeChem(ionmodechem_id, chemical_composition) values (26, 'N/A');
 insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".IonModeChem(ionmodechem_id, chemical_composition) values (27, '');
 
-/*
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (1, '20-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (2, '19-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (3, '18-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (4, '17-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (5, '16-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (6, '15-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (7, '14-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (8, '13-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (9, '12-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (10, '11-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (11, '10-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (12, '9-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (13, '8-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (14, '7-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (15, '6-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (16, '5-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (17, '4-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (18, '3-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (19, '2-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (20, '1-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (21, '0-');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (22, '0');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (23, '0+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (24, '1+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (25, '2+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (26, '3+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (27, '4+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (28, '5+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (29, '6+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (30, '7+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (31, '8+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (32, '9+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (33, '10+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (34, '11+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (35, '12+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (36, '13+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (37, '14+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (38, '15+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (39, '16+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (40, '17+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (41, '18+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (42, '19+');
-insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (43, '20+');
-*/
-/*
-TODO: implement the loop insert for the charge_id, need to include the insert statement
-                    concat()
-                    v_charge_string := concat   '%-',abs(i);
-                    insert into "MolRefAnt_DB_PostGreSQL"."MolRefAnt_DB".Charge(charge_id, charge) VALUES (v_charge_id, '%-',abs(i));
-
-*/
 do
 $$
     declare

@@ -36,9 +36,9 @@ import time
 #from subprocess import PIPE, run
 # appending the utils path
 sys.path.append(os.path.join(os.getcwd(), '.'))
-sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes'))
-sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes','utils'))
-sys.path.append(os.path.join(os.getcwd(), '.','src','PythonCodes','SQL','MsSQL','sql_handlers'))
+sys.path.append(os.path.join(os.getcwd(), '.', 'src', 'PythonCodes'))
+sys.path.append(os.path.join(os.getcwd(), '.', 'src', 'PythonCodes', 'utils'))
+sys.path.append(os.path.join(os.getcwd(), '.', 'src', 'PythonCodes', 'SQL', 'MsSQL', 'sql_handlers'))
 # application imports
 import src.PythonCodes.DataManage_common
 import src.PythonCodes.utils.messageHandler
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     logfile = c.getLogfileName()  # getting the name of the global log file
     m = src.PythonCodes.utils.messageHandler.messageHandler(logfile=logfile)
 
-    #argument stuff for the command line
+    # argument stuff for the command line
     version = src.PythonCodes.DataManage_common.DataManage_version()
     args = src.PythonCodes.docopt.docopt(__doc__, version=version)
 
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     src.PythonCodes.DataManage_header.print_MolRefAnt_DB_Scan_header(common=c, messageHandler=m)
     # platform, release  = whichPlatform()
     sysver, platform, system, release, node, processor, cpu_count = src.PythonCodes.DataManage_common.whichPlatform()
-    #if (system == 'Linux'):
+    # if (system == 'Linux'):
     m.printMesgStr("System            : ", c.get_B_Green(), system)
     m.printMesgStr("System time stamp : ", c.get_B_Yellow(), sysver)
     m.printMesgStr("Release           : ", c.get_B_Magenta(), release)
@@ -81,10 +81,10 @@ if __name__ == '__main__':
     m.printMesgStr("Node              : ", c.get_B_Yellow(), node)
     m.printMesgStr("Processor type    : ", c.get_B_Red(), processor)
     m.printMesgStr("CPU cores count   : ", c.get_B_Green(), cpu_count)
-    #---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
     # Command line handler for now. TODO: need to immplement class
-    #---------------------------------------------------------------------------
-    #--app_root=APP_ROOT {required}
+    # ---------------------------------------------------------------------------
+    # --app_root=APP_ROOT {required}
     SLEEP_TIME = 20
     if args['--sleep_time']:
         SLEEP_TIME = args['--sleep_time']
@@ -98,15 +98,19 @@ if __name__ == '__main__':
     # --------------------------------------------------------------------------
     # [Paths-Setup]
     # --------------------------------------------------------------------------
-    APP_ROOT    = os.getcwd()
-    #DATA_PATH   = os.path.join('E:', 'data', 'LC_MS')
-    DATA_PATH         = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData')
+    APP_ROOT = os.getcwd()
+    # DATA_PATH   = os.path.join('E:', 'data', 'LC_MS')
+    # DATA_PATH         = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData')
+    DATA_PATH = os.path.join(os.path.sep, 'data', 'frederic')
     PROJECTNAME = ""
     POOL_COMPONENTDIR = ""
-    #TARGETDIR   = os.path.join('E:','DataProcInterCom')
-    #TBLECNTS_DIR= os.path.join('E:','DataProcInterCom','TableCounts')
-    TARGETDIR  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData', 'DataProcInterCom')
-    TBLECNTS_DIR      = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData', 'DataProcInterCom', 'TableCounts')
+    # TARGETDIR   = os.path.join('E:','DataProcInterCom')
+    # TBLECNTS_DIR= os.path.join('E:','DataProcInterCom','TableCounts')
+    # TARGETDIR  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData', 'DataProcInterCom')
+    TARGETDIR = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom')
+    # TBLECNTS_DIR      = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData', 'DataProcInterCom', 'TableCounts')
+    TBLECNTS_DIR = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom', 'TableCounts')
+
     SOFTWARE    = "N/A"
     c.setApp_root(APP_ROOT)
     c.setData_path(DATA_PATH)

@@ -66,11 +66,20 @@ import src.PythonCodes.utils.MgfTransformer
 import src.PythonCodes.utils.DataBaseHandler
 import src.PythonCodes.SQL.MsSQL.sql_handlers.MsSQLLauncher
 import src.PythonCodes.SQL.MsSQL.sql_handlers.QueryMsSQL
-import src.PythonCodes.src.MachineLearning.DeepL
-
+import src.PythonCodes.docopt
 #from docopt import docopt
 
-import src.PythonCodes.docopt
+try:
+    import torch
+    TORCH_AVAILABLE = True
+    print("TORCH_AVAILABLE --->: ", TORCH_AVAILABLE)
+    import src.PythonCodes.src.MachineLearning.DeepL
+except (ImportError, NameError, AttributeError, OSError):
+    rc = -1
+    print(" Python package torch is not installed on your system, verify or install\n")
+    print(" The MachineLearning.DeepL class will not be used and\n")
+    TORCH_AVAILABLE = False
+    print("TORCH_AVAILABLE --->: ", TORCH_AVAILABLE)
 
 #C:\Program Files\Python312\python.exe
 ext_asc = ".asc"
@@ -124,18 +133,22 @@ if __name__ == "__main__":
     PUBCHEM_URL = "https://pubchem.ncbi.nlm.nih.gov/compound/"
 
     APP_ROOT          = os.getcwd()
-    DATA_PATH         = os.path.join('E:', 'data')    # , 'LC_MS'
+    #DATA_PATH         = os.path.join('E:', 'data')    # , 'LC_MS'
+    DATA_PATH         = os.path.join(os.path.sep, 'data')    # , 'LC_MS'
     #DATA_PATH         = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData')
     PROJECTNAME       = ""
     POOL_COMPONENTDIR = ""
-    DATAPROCINTERCOM  = os.path.join('E:', 'DataProcInterCom')
-    TBLECNTS_DIR      = os.path.join('E:', 'DataProcInterCom', 'TableCounts')
+    #DATAPROCINTERCOM  = os.path.join('E:', 'DataProcInterCom')
+    DATAPROCINTERCOM  = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom')
+    #TBLECNTS_DIR      = os.path.join('E:', 'DataProcInterCom', 'TableCounts')
+    TBLECNTS_DIR      = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom', 'TableCounts')
     #DATAPROCINTERCOM  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
     #                                 'DataProcInterCom')
     #TBLECNTS_DIR      = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
     #                                 'DataProcInterCom', 'TableCounts')
     SOFTWARE          = "N/A"
-    SQL_FULLPATH_DIR  = os.path.join('E:', 'SQLFiles_sql')
+    #SQL_FULLPATH_DIR  = os.path.join('E:', 'SQLFiles_sql')
+    SQL_FULLPATH_DIR  = os.path.join(os.path.sep, 'data', 'frederic', 'SQLFiles_sql')
     #SQL_FULLPATH_DIR  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
     #                                 'SQLFiles_sql')
     SQL_DIR           = 'SQLFiles_sql'

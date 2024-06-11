@@ -151,7 +151,7 @@ class JSonLauncher:
         fileout = self.jsontargetfile
         self.m.printMesgAddStr("[json-file ]:        (out) --->: ", self.c.getCyan(), fileout)
         self.json_mol_file_lst = []
-        if self.c.get_system() == "Windows":
+        if self.c.get_system() == "Windows" or self.c.get_system() == "Linux":
             for (root, dirs, file) in os.walk(self.c.getPool_Targetdir()):
                 for f in file:
                     if self.c.getDatabase_name() in f and "header" not in f:

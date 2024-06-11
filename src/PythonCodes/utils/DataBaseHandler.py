@@ -308,7 +308,11 @@ class DataBaseHandler:
         # ----------------------------------------------------------------------
         # TODO: [start] may need to move this method to create_molecule or header dictionary or rather
         for i in range(len(self.database_hreader_lst[:])):
-            msg = str(self.database_hreader_lst[i]).split('â€')
+            #print("str(self.database_hreader_lst[i]) --->: ", str(self.database_hreader_lst[i]))
+            if self.c.get_system() == 'Windows':
+                msg = str(self.database_hreader_lst[i]).split('â€')
+            elif self.c.get_system() == 'Linux':
+                msg = str(self.database_hreader_lst[i]).split('–')
             #print("self.database_hreader_lst["+str(i)+"]: --->: ", msg)
             key = msg[0]
             value = msg[1]
