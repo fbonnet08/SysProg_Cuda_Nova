@@ -132,28 +132,30 @@ if __name__ == "__main__":
     # --------------------------------------------------------------------------
     PUBCHEM_URL = "https://pubchem.ncbi.nlm.nih.gov/compound/"
 
+    # linux VM machine
+    if c.get_system() == "Linux":
+        DATA_PATH         = os.path.join(os.path.sep, 'data')    # , 'LC_MS'
+        DATAPROCINTERCOM  = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom')
+        TBLECNTS_DIR      = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom', 'TableCounts')
+        SQL_FULLPATH_DIR  = os.path.join(os.path.sep, 'data', 'frederic', 'SQLFiles_sql')
+    # Windows Local machine
+    if c.get_system() == "Windows":
+        DATA_PATH         = os.path.join('E:', 'data')    # , 'LC_MS'
+        DATAPROCINTERCOM  = os.path.join('E:', 'DataProcInterCom')
+        TBLECNTS_DIR      = os.path.join('E:', 'DataProcInterCom', 'TableCounts')
+        SQL_FULLPATH_DIR  = os.path.join('E:', 'SQLFiles_sql')
+        #DATA_PATH         = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData')
+        #DATAPROCINTERCOM  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData','DataProcInterCom')
+        #TBLECNTS_DIR      = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData','DataProcInterCom', 'TableCounts')
+        #SQL_FULLPATH_DIR  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData','SQLFiles_sql')
+    # [end-if] statement
     APP_ROOT          = os.getcwd()
-    #DATA_PATH         = os.path.join('E:', 'data')    # , 'LC_MS'
-    DATA_PATH         = os.path.join(os.path.sep, 'data')    # , 'LC_MS'
-    #DATA_PATH         = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData')
     PROJECTNAME       = ""
     POOL_COMPONENTDIR = ""
-    #DATAPROCINTERCOM  = os.path.join('E:', 'DataProcInterCom')
-    DATAPROCINTERCOM  = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom')
-    #TBLECNTS_DIR      = os.path.join('E:', 'DataProcInterCom', 'TableCounts')
-    TBLECNTS_DIR      = os.path.join(os.path.sep, 'data', 'frederic', 'DataProcInterCom', 'TableCounts')
-    #DATAPROCINTERCOM  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
-    #                                 'DataProcInterCom')
-    #TBLECNTS_DIR      = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
-    #                                 'DataProcInterCom', 'TableCounts')
     SOFTWARE          = "N/A"
-    #SQL_FULLPATH_DIR  = os.path.join('E:', 'SQLFiles_sql')
-    SQL_FULLPATH_DIR  = os.path.join(os.path.sep, 'data', 'frederic', 'SQLFiles_sql')
-    #SQL_FULLPATH_DIR  = os.path.join('C:', os.path.sep, 'Users', 'Frederic', 'OneDrive', 'UVPD-Perpignan', 'SourceCodes', 'SmallData',
-    #                                 'SQLFiles_sql')
     SQL_DIR           = 'SQLFiles_sql'
     APP_DATA_PATH     = "N/A"
-
+    # putting statting
     c.setApp_root(APP_ROOT)
     c.setData_path(DATA_PATH)
     c.setProjectName(PROJECTNAME)
@@ -506,6 +508,7 @@ if __name__ == "__main__":
             #---------------------------------------------------------------------------
             # TODO: Finish the all table database insertion
             #Here we need to insert at the nth+1 entry
+            m.printMesg("Commencing database insertion ...")
             rc, sql_spectral_data_FileList = mssqlLauncher.PostgreSQL_UpdaterInsertors(tb='spectral_data',
                                                                                        jsonSanner=jsonSanner, json_data_table_count=json_data_table_count,
                                                                                        queryMsSQL=queryMsSQL, cursor=cursor,

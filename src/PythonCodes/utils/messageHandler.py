@@ -69,10 +69,12 @@ import numpy as np
 #appending the utils path
 sys.path.append(os.path.join(os.getcwd(), '.'))
 sys.path.append(os.path.join(os.getcwd(), '..'))
+sys.path.append(os.path.join(os.getcwd(), '..','utils'))
 #application imports
-from DataManage_common import *
+#from DataManage_common import *
+import src.PythonCodes.DataManage_common
 #from StopWatch import *
-import utils.StopWatch
+import src.PythonCodes.utils.StopWatch
 #-------------------------------------------------------------------------------
 # Printing the difference of the norm
 #-------------------------------------------------------------------------------
@@ -90,13 +92,14 @@ import utils.StopWatch
 def print_linalgNorm_diff(c,m,str_conv1f, conv1f, str_conv2f, conv2f):
 
         import scipy
-
+        m.printMesgStr("Extracting database content (database_file): ", self.c.getGreen(), __func__)
         diff_12f = conv1f - conv2f
 
         msg = c.getYellow()+"||"+str_conv1f+" - "+str_conv2f+"||              : " \
               + c.getGreen() + str(scipy.linalg.norm(diff_12f.flatten(),ord=2)) \
               + c.get_C_Reset()
         print(msg)
+        m.printMesgAddStr("[message]: print_linalgNorm_diff --->: ", c.getMagenta(), msg)
 
         msg = c.getYellow()+"||"+str_conv1f+"||                        : " \
               + c.getYellow() + str(scipy.linalg.norm(conv1f.flatten(),ord=2)) \
@@ -105,6 +108,7 @@ def print_linalgNorm_diff(c,m,str_conv1f, conv1f, str_conv2f, conv2f):
 
         msg = c.getYellow()+"||"+str_conv1f+" - "+str_conv2f+"|| / ||"+str_conv1f+"||: " \
               + c.getMagenta() + str(scipy.linalg.norm(diff_12f.flatten(),ord=2) / scipy.linalg.norm(conv1f.flatten(),ord=2)) + c.get_C_Reset()
+
         print(msg)
         return diff_12f
 #-------------------------------------------------------------------------------
@@ -131,7 +135,7 @@ class messageHandler:
     #---------------------------------------------------------------------------
     #initialises the variables
     def initialize(self):
-        self.c = DataManage_common()
+        self.c = src.PythonCodes.DataManage_common.DataManage_common()
         if (self.c.getBench_cpu()==True):
             self.benchfile = open('resmapBench.asc','a')
     #Debug logging
@@ -765,7 +769,7 @@ class messageHandler:
             self.benchfile.write(bf_msg)
 
     def printBenchTime_cpu(self,strg,color,stopwatch,info,__func__):
-        time_taken = utils.StopWatch.GetTimerValue_secs(stopwatch)#GetTimerValue_secs(stopwatch)
+        time_taken = src.PythonCodes.utils.StopWatch.GetTimerValue_secs(stopwatch)#GetTimerValue_secs(stopwatch)
         minutes, secs = divmod(time_taken, 60)
         self.color = color
         self.msg = self.c.getCyan()     +" << ["                         \

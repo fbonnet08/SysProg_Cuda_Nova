@@ -468,7 +468,7 @@ class DataBaseHandler:
 
         INSTRUMENTTYPE_key = "INSTRUMENTTYPE"
         INSTRUMENT_key = "INSTRUMENT"
-        # TODO: in the FragHub
+        # TODO:
         #       PRECURSORMZ ----> PEPMASS                             :---->
         #       INSTRUMENTTYPE + INSTRUMENT ----> SOURCE_INSTRUMENT   :---->
         #       PRECURSORTYPE ----> IONMODE                           :---->
@@ -658,7 +658,7 @@ class DataBaseHandler:
         CHARGE_KEY = "CHARGE"
         PUBCHEM_key = "PUBCHEM"
         TAXONOMY_key = "TAXONOMY"
-        # TODO: in the FragHub
+        # TODO:
         #       PRECURSORMZ ----> PEPMASS                             :----> Done
         #       INSTRUMENTTYPE + INSTRUMENT ----> SOURCE_INSTRUMENT   :----> Done
         #       PRECURSORTYPE ----> IONMODE                           :----> Done There is already a IONMODE in record
@@ -838,6 +838,7 @@ class DataBaseHandler:
             cnt = 0
             ith_molecule = 0
             insert_msg = ""
+            self.m.printMesgAddStr("[xtrct] molecules_lst from --->: ", self.c.getCyan(), file_path)
             progressBar = src.PythonCodes.utils.progressBar.ProgressBar()
             for i in range(database_file_len):
                 if start_key in lines[i].split('\n')[0]:
@@ -853,19 +854,19 @@ class DataBaseHandler:
                 elif appending:
                     # This block of code has been modified to allow external databases imports
                     insert_msg = (lines[i].split('\n')[0]).replace('\t', ' ')
-                    # TODO: fix the back slashes here because the SMILEY are incorrect otherwise
-                    insert_msg = insert_msg.replace("\"", '')
+                    # TODO: fix the back slashes here because the SMILEY are incorrect otherwise  :---> done
+                    insert_msg = insert_msg.replace("\"", '\\')
                     insert_msg = insert_msg.replace(";", ' ')
                     insert_msg = insert_msg.replace("'", ' ')
                     insert_msg = insert_msg.replace("N\\A", 'N/A')
-                    # TODO: fix the back slashes here because the SMILEY are incorrect otherwise
-                    insert_msg = insert_msg.replace("\\", '/')
+                    # TODO: fix the back slashes here because the SMILEY are incorrect otherwise  :---> done
+                    insert_msg = insert_msg.replace("\\", '\\\\')
                     #print("insert_msg --->: ", insert_msg)
                     # Taking care of the sign in the charge
                     if SMILES_key in lines[i].split('\n')[0]:
-                        # TODO: fix the back slashes here because the SMILEY are incorrect otherwise
-                        insert_msg = insert_msg.replace('\\[', '[')
-                        insert_msg = insert_msg.replace('\\', '')
+                        # TODO: fix the back slashes here because the SMILEY are incorrect otherwise  :---> done
+                        insert_msg = insert_msg.replace('\\[', '\\\\[')
+                        #insert_msg = insert_msg.replace('\\', '')
                     if CHARGE_key in lines[i].split('\n')[0]:
                         if lines[i].split('\n')[0].startswith("CHARGE=-"):
                             splited_charge = lines[i].split('\n')[0].split('-')

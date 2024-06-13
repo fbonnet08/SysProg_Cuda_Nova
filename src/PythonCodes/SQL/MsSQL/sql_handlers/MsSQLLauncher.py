@@ -279,7 +279,8 @@ class MsSQLLauncher:
         # ----------------------------------------------------------------------
         return rc, sqlUsersFileList
 
-
+    # TODO: need to remove jsonfile_content_key, jsonfile_content_value from the argument list
+    #       later if not needed.
     def PostgreSQL_UpdaterInsertors(self, tb,
                                     jsonSanner, json_data_table_count,
                                     queryMsSQL, cursor,
@@ -287,7 +288,8 @@ class MsSQLLauncher:
                                     jsonfile_content_key, jsonfile_content_value):
         __func__= sys._getframe().f_code.co_name
         rc = self.c.get_RC_SUCCESS()
-
+        self.m.printMesgStr("PostgreSQL database insertion, imcoming table :----> "+self.c.getYellow()+str(tb)+" --->: ",
+                            self.c.getGreen(), __func__)
         if self.c.getDebug() == 1:
             self.m.printMesg("Project Details in question...")
             self.m.printMesgAddStr(" ProjectName               --->: ", self.c.getCyan(), self.projectName)
@@ -519,9 +521,8 @@ class MsSQLLauncher:
         __func__= sys._getframe().f_code.co_name
         rc = self.c.get_RC_SUCCESS()
         # ----------------------------------------------------------------------
-        # First create an empty row
+        # First create an empty row, method not used yet, might later
         # ----------------------------------------------------------------------
-
         return rc
 
     def MolRefAnt_DB_POstGresSQLWritter_Tool(self, file_hdl, queryMsSQL, cursor,
@@ -874,7 +875,6 @@ class MsSQLLauncher:
                ", "+str(tool_id)+", "+str(database_id)+""+", "+str(data_id)+
                ");"
         )
-
         rc = self.MolRefAnt_DB_POstGresSQLPusher(queryMsSQL=queryMsSQL, cursor=cursor, push_request=msg)
         #-------------------------------------------------------------------
         # [Measure]
@@ -896,9 +896,13 @@ class MsSQLLauncher:
                                                            queryMsSQL, cursor,
                                                            i_jsonfile_content_dict,
                                                           'Compound', tb_count)
+        #-------------------------------------------------------------------
+        # [Done] done for this molecule
+        #-------------------------------------------------------------------
+        # Printing a breakline to distinguish from the different molecule insertion
+        self.m.printLine()
 
         return rc
-
     #-------------------------------------------------------------------
     # [Compound]
     #-------------------------------------------------------------------
@@ -1486,13 +1490,15 @@ class MsSQLLauncher:
     def MolRefAnt_DB_POstGresSQLPusher(self, queryMsSQL, cursor, push_request):
         rc = self.c.get_RC_SUCCESS()
         __func__= sys._getframe().f_code.co_name
-
-        self.m.printMesg("Query ---> "+self.c.getCyan()+__func__+ \
+        # inserting time stamp to keep track of the querries
+        rc,time_stamp = self.m.get_local_current_Time(self.c)
+        # Printing to screen the querry before executing it.
+        self.m.printMesg("Query"+self.c.getMagenta()+str(time_stamp)+self.c.getBlue()+ \
+                         " ---> "+self.c.getCyan()+__func__+ \
                          self.c.getBlue()+" --->: "+self.c.getYellow()+push_request )
         cursor.execute(push_request)
         queryMsSQL.cnxn.commit()
         return rc
-
     #---------------------------------------------------------------------------
     # [Bat-Writters]
     #---------------------------------------------------------------------------
